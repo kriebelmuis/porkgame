@@ -32,12 +32,18 @@ return {
             ["op het bed gaan liggen"] = {
                 item = "cel sleutel",
                 messages = {
-                    "*je gaat op bed liggen*",
-                    ". . .",
-                    "je vind een envelop onder jouw kussen",
-                    "*je doet hem open*",
-                    ". . .",
-                    "er zit een sleutel in!",
+                    {
+                        "*je gaat op bed liggen*",
+                        ". . .",
+                        "je vind een envelop onder jouw kussen",
+                        "*je doet hem open*",
+                        ". . .",
+                        "er zit een sleutel in!",
+                    },
+                    {
+                        "*je gaat op bed liggen*",
+                        ". . ."
+                    }
                 }
             }
         }

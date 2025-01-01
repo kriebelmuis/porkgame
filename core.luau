@@ -34,29 +34,26 @@ function module.init(startAt: number)
                 if hasItem then
                     for i, message in pairs(optionData.messages[2]) do
                         stdio.prompt("text", message)
-
-                        task.wait(.5)
                     end
                 else
                     for i, message in pairs(optionData.messages[1]) do
                         stdio.prompt("text", message)
-
-                        task.wait(.5)
                     end
                 end
             elseif optionData.item then
-                for i, message in pairs(optionData.messages) do
-                    stdio.prompt("text", message)
-
-                    task.wait(.5)
+                local hasItem = module.hasItem(optionData.item)
+                if hasItem then
+                    for i, message in pairs(optionData.messages[2]) do
+                        stdio.prompt("text", message)
+                    end
+                else
+                    for i, message in pairs(optionData.messages[1]) do
+                        stdio.prompt("text", message)
+                    end
                 end
-
-                module.addItem(optionData.item)
             else
                 for i, message in pairs(optionData) do
                     stdio.prompt("text", message)
-
-                    task.wait(.5)
                 end
             end
 
@@ -65,40 +62,35 @@ function module.init(startAt: number)
                 return
             end
         end
-
-        task.wait(.5)
     end
 end
 
-function module.getInventory()
-    local bytecode = luau.compile(`return {tostring(fs.readFile("inventory"))}`)
-    local fun = luau.load(bytecode)
+function module.writeInventory(inventory: { string })
+    fs.writeFile("inventory.txt", table.concat(inventory, "&"))
+end
 
-    return fun()
+function module.getInventory() : { string }
+    return string.split(tostring(fs.readFile("inventory.txt")), "&")
 end
 
 function module.addItem(item: string)
     local inventory = module.getInventory()
-
-    stdio.prompt("text", `jij vond een {item}`)
     table.insert(inventory, item)
-
-    fs.writeFile("inventory", tostring(inventory))
+    module.writeInventory(inventory)
 end
 
 function module.removeItem(item: string)
     local inventory = module.getInventory()
-
-    stdio.prompt("text", `{item} gebruikt`)
     table.remove(inventory, table.find(inventory, item))
-
-    fs.writeFile("inventory", tostring(inventory))
+    module.writeInventory(inventory)
 end
 
 function module.hasItem(item: string)
-    local inventory = fs.readFile("inventory.luau") :: { string }
-
-    return table.find(inventory, item) and true or false
+    if table.find(module.getInventory(), item) <= 0 then
+        return false
+    else
+        return true
+    end
 end
 
 return module
