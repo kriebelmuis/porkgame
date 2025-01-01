@@ -1,0 +1,1 @@
+require("core.luau").init()
