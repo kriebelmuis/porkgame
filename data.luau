@@ -6,9 +6,9 @@ return {
     {
         dialog = "wat wil je doen?",
         options = {
-            {
-                option = "proberen cel deur openen",
+            ["proberen cel deur openen"] = {
                 required = "cel sleutel",
+                flag = true,
                 messages = {
                     {
                         "*je probeert de cel deur te openen*",
@@ -23,17 +23,13 @@ return {
                     }
                 }
             },
-            {
-                option = "door het raam kijken",
-                messages = {
-                    "*je kijkt door het raam*",
-                    ". . .",
-                    "je ziet een gang met een paar zwaar bewapende bewakers lopen",
-                    "je kan niet naar buiten",
-                }
+            ["door het raam kijken"] = {
+                "*je kijkt door het raam*",
+                ". . .",
+                "je ziet een gang met een paar zwaar bewapende bewakers lopen",
+                "je kan niet naar buiten",
             },
-            {
-                option = "op het bed gaan liggen",
+            ["op het bed gaan liggen"] = {
                 item = "cel sleutel",
                 messages = {
                     "*je gaat op bed liggen*",
@@ -43,7 +39,7 @@ return {
                     ". . .",
                     "er zit een sleutel in!",
                 }
-            },
+            }
         }
     }
 }

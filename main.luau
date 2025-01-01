@@ -1,1 +1,1 @@
-require("core.luau").init()
+require("core.luau").init(1)
