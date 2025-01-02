@@ -1,1 +1,5 @@
-require("core.luau").init(1)
+local core = require("core.luau")
+
+repeat
+    core.init(1)
+until false

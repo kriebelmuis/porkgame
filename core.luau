@@ -13,7 +13,7 @@ function module.init(startAt: number)
         local dialogData = data[i]
 
         if typeof(dialogData) == "string" then
-            stdio.prompt("text", dialogData)
+            module.typeWrite(dialogData)
         elseif typeof(dialogData) == "table" then
             local flag = false
             local options = {}
@@ -22,38 +22,42 @@ function module.init(startAt: number)
                 table.insert(options, option)
             end
 
+            stdio.write("\n")
+
             local input = stdio.prompt("select", dialogData.dialog, options)
             local optionData = dialogData.options[options[input]]
 
-            if optionData.flag then
-                flag = true
-            end
+            stdio.write("\n")
 
             if optionData.required then
                 local hasItem = module.hasItem(optionData.required)
                 if hasItem then
                     for i, message in pairs(optionData.messages[2]) do
-                        stdio.prompt("text", message)
+                        module.typeWrite(message)
+                    end
+
+                    if optionData.flag then
+                        flag = true
                     end
                 else
                     for i, message in pairs(optionData.messages[1]) do
-                        stdio.prompt("text", message)
+                        module.typeWrite(message)
                     end
                 end
             elseif optionData.item then
                 local hasItem = module.hasItem(optionData.item)
                 if hasItem then
                     for i, message in pairs(optionData.messages[2]) do
-                        stdio.prompt("text", message)
+                        module.typeWrite(message)
                     end
                 else
                     for i, message in pairs(optionData.messages[1]) do
-                        stdio.prompt("text", message)
+                        module.typeWrite(message)
                     end
                 end
             else
                 for i, message in pairs(optionData) do
-                    stdio.prompt("text", message)
+                    module.typeWrite(message)
                 end
             end
 
@@ -62,7 +66,28 @@ function module.init(startAt: number)
                 return
             end
         end
+
+        task.wait(0.5)
     end
+end
+
+function module.typeWrite(text: string)
+    local characters = text:split("")
+    local wordCount = #text:split(" ")
+
+    if string.sub(text, 1, 1) == "*" then
+        stdio.write("! ")
+    else
+        stdio.write("> ")
+    end
+
+    for i, char in pairs(characters) do
+        stdio.write(char)
+        task.wait(0.05)
+    end
+
+    stdio.write("\n")
+    task.wait(wordCount / 40)
 end
 
 function module.writeInventory(inventory: { string })
@@ -86,7 +111,9 @@ function module.removeItem(item: string)
 end
 
 function module.hasItem(item: string)
-    if table.find(module.getInventory(), item) <= 0 then
+    local found = table.find(module.getInventory(), item)
+
+    if not found or found <= 0 then
         return false
     else
         return true

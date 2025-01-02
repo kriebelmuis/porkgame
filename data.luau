@@ -1,10 +1,10 @@
 return {
-    "*je kijk om je heen*",
+    "*je word wakker*",
     ". . .",
     "het lijkt net alsof je in een gevangenis cel zit",
     "je ziet een cel deur, een raam en een bed om je heen",
     {
-        dialog = "wat wil je doen?",
+        dialog = "wat ga je doen?",
         options = {
             ["proberen cel deur openen"] = {
                 required = "cel sleutel",
@@ -26,8 +26,8 @@ return {
             ["door het raam kijken"] = {
                 "*je kijkt door het raam*",
                 ". . .",
-                "je ziet een gang met een paar zwaar bewapende bewakers lopen",
-                "je kan niet naar buiten",
+                "je ziet een paar bewakers lopen",
+                "ze hebben een opvallende sleutelbos bij zich, misschien moet ik dat onthouden",
             },
             ["op het bed gaan liggen"] = {
                 item = "cel sleutel",
@@ -47,5 +47,7 @@ return {
                 }
             }
         }
-    }
+    },
+    "*opent deur met sleutel*",
+    ". . .",
 }
