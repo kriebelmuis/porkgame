@@ -6,3 +6,4 @@ timeout /t -1
 cls
 
 lune.exe run main.luau
+pause>nul
