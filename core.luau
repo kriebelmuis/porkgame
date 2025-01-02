@@ -8,7 +8,7 @@ local luau = require("@lune/luau")
 
 local data = require("data.luau")
 
-function module.init(startAt: number)
+function module.init(startAt: number): number?
     for i = startAt, #data do
         local dialogData = data[i]
 
@@ -71,6 +71,8 @@ function module.init(startAt: number)
 
         task.wait(0.5)
     end
+
+    return nil
 end
 
 function module.typeWrite(text: string)

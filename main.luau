@@ -4,4 +4,4 @@ local last = 1
 
 repeat
     last = core.init(last)
-until false
+until last == nil
