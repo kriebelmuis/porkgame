@@ -38,7 +38,7 @@ function module.init(startAt: number)
 
                     if optionData.flag then
                         flag = true
-                    end
+                    end 
                 else
                     for i, message in pairs(optionData.messages[1]) do
                         module.typeWrite(message)
@@ -54,6 +54,8 @@ function module.init(startAt: number)
                     for i, message in pairs(optionData.messages[1]) do
                         module.typeWrite(message)
                     end
+
+                    module.addItem(optionData.item)
                 end
             else
                 for i, message in pairs(optionData) do
@@ -63,7 +65,7 @@ function module.init(startAt: number)
 
             if not flag then
                 module.init(i)
-                return
+                return i
             end
         end
 
@@ -75,15 +77,26 @@ function module.typeWrite(text: string)
     local characters = text:split("")
     local wordCount = #text:split(" ")
 
-    if string.sub(text, 1, 1) == "*" then
+    local waitTime = 0.05
+
+    local firstChar = string.sub(text, 1, 1)
+
+    if firstChar == "*" then
         stdio.write("! ")
+    elseif firstChar == "." then
+        stdio.write("> ")
+
+        waitTime = 0.5
     else
         stdio.write("> ")
     end
 
     for i, char in pairs(characters) do
         stdio.write(char)
-        task.wait(0.05)
+        
+        if char ~= " " then
+            task.wait(waitTime)
+        end
     end
 
     stdio.write("\n")
@@ -91,27 +104,29 @@ function module.typeWrite(text: string)
 end
 
 function module.writeInventory(inventory: { string })
+    warn("writing")
     fs.writeFile("inventory.txt", table.concat(inventory, "&"))
 end
 
-function module.getInventory() : { string }
+function module.readInventory() : { string }
+    warn("reading")
     return string.split(tostring(fs.readFile("inventory.txt")), "&")
 end
 
 function module.addItem(item: string)
-    local inventory = module.getInventory()
+    local inventory = module.readInventory()
     table.insert(inventory, item)
     module.writeInventory(inventory)
 end
 
 function module.removeItem(item: string)
-    local inventory = module.getInventory()
+    local inventory = module.readInventory()
     table.remove(inventory, table.find(inventory, item))
     module.writeInventory(inventory)
 end
 
 function module.hasItem(item: string)
-    local found = table.find(module.getInventory(), item)
+    local found = table.find(module.readInventory(), item)
 
     if not found or found <= 0 then
         return false

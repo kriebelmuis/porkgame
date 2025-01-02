@@ -19,7 +19,7 @@ return {
                     {
                         "*je gebruikt de cel sleutel*",
                         ". . .",
-                        "de cel deur gaat open"
+                        "*metalen cel deur piept luid*",
                     }
                 }
             },
@@ -48,6 +48,6 @@ return {
             }
         }
     },
-    "*opent deur met sleutel*",
     ". . .",
+    "dit was hem voor nu heren"
 }

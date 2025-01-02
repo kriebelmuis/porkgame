@@ -1,5 +1,7 @@
 local core = require("core.luau")
 
+local last = 1
+
 repeat
-    core.init(1)
+    last = core.init(last)
 until false
