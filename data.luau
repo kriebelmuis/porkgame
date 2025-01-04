@@ -54,7 +54,7 @@ return {
     },
     "je ontsnapte uit de cel, je zit in een soort kelder",
     "je neem de trap naar boven",
-    "de deur is verassent genoeg niet op slot",
+    "de hoofddeur naar buiten is verassend genoeg niet op slot",
     "*doet de deur open*",
     ". . .",
     "opeens ben je in een grote gang terecht",
@@ -67,26 +67,34 @@ return {
     "relaxde bewaker: 'boeken? wat ben jij? een fucking nerd? *slaat bewaker met bril op rug*'",
     "*een sleutelbos valt op de grond*",
     "het lijkt alsof de bewakers niet door hadden dat ze hun sleutelbos lieten vallen",
+    "zou ik de sleutelbos op pakken? of is dat te gevaarlijk?",
     {
         dialog = "pak je de sleutelbos op?",
         options = {
             ["laat de sleutelbos liggen"] = {
-                "*je laat de sleutelbos liggen*",
-                ". . .",
-                "je loopt verder door de gangen",
+                ending = "gepakt door camera",
+                messages = {
+                    "je loopt verder door de gang",
+                    ". . .",
+                    "*piep* *piep* *piep*",
+                    "wat hoor ik piepen?",
+                    "*je kijkt achter je*",
+                    "een camera heeft je door!"
+                }
             },
             ["pak de sleutelbos op"] = {
                 item = "sleutelbos",
                 messages = {
                     "*je pakt de sleutelbos op*",
                     ". . .",
-                    "je loopt verder door de gangen",
-                },
+                    "je loopt verder door de gang",
+                }
             }
         }
     },
     "je vind een geheime doorgang achter een schilderij",
     ". . .",
+    "je denk dat je veilig ben",
     "je loopt door de geheime doorgang en komt in een geheime kamer terecht",
     "er ligt overal goud en juwelen",
     {
@@ -118,7 +126,7 @@ return {
         dialog = "welke code ga je proberen?",
         options = {
             ["probeer 3850"] = {
-                dead = true,
+                ending = "boem",
                 messages = {
                     "*je toetst de 4 nummers in*",
                     ". . .",
@@ -128,7 +136,7 @@ return {
                 }
             },
             ["probeer 5736"] = {
-                dead = true,
+                ending = "boem",
                 messages = {
                     "*je toetst de 4 nummers in*",
                     ". . .",
@@ -138,7 +146,7 @@ return {
                 }
             },
             ["probeer 5385"] = {
-                dead = true,
+                ending = "gepakt bij kluis",
                 messages = {
                     "*je toetst de 4 nummers in*",
                     ". . .",
@@ -146,15 +154,12 @@ return {
                     "bewaker achter je: 'hey! wat doe jij hier?'",
                 }
             },
-            ["probeer 5937"] = {
-                dead = true,
-                messages = {
-                    "*je toetst de 4 nummers in*",
-                    ". . .",
-                    "explosieven ontploffen in de kluis",
-                    "*je ziet opeens niets meer*",
-                    ". . ."
-                }
+            ["loop verder"] = {
+                "*je toetst de 4 nummers in*",
+                ". . .",
+                "explosieven ontploffen in de kluis",
+                "*je ziet opeens niets meer*",
+                ". . ."
             },
         },
     },
@@ -164,7 +169,6 @@ return {
         options = {
             ["open de deur"] = {
                 required = "sleutelbos",
-                dead = true,
                 messages = {
                     {
                         "*duwt sleutel in de deur*",
@@ -173,12 +177,7 @@ return {
                     },
                     {
                         "*je opent de deur*",
-                        ". . .",
-                        "een bewaker ziet je",
-                        "bewaker: 'hey! wat doe jij hier?'",
-                        "*je rent weg*",
-                        "de bewaker schiet op je",
-                        "*je lig dood op de grond*"
+                        ". . ."
                     }
                 }
             }
@@ -188,13 +187,12 @@ return {
         dialog = "hoe ga je de deur open maken?",
         options = {
             ["trap de deur open"] = {
-                messages = {
-                    "*je trapt de deur open met all jouw kracht*",
-                    ". . .",
-                    "de deur vliegt open, maar maakt opvallend weinig geluid",
-                },
+                "*je trapt de deur open met all jouw kracht*",
+                ". . .",
+                "de deur vliegt open, maar maakt opvallend weinig geluid",
             },
             ["duw de deur zachtjes open"] = {
+                ending = "gepakt bij deur",
                 messages = {
                     "*Je duwt de deur zachtjes open.*",
                     ". . .",
@@ -204,8 +202,8 @@ return {
                     "*je blijf rennen*",
                     "de bewaker ontlaad zijn volledige magazine in je rug",
                     "*je valt dood neer door bloed verlies*"
-                },
-            },
+                }
+            }
         }
     },
     "je ziet een bewaker naast een boot in de verte",

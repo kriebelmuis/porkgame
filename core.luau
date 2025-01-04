@@ -9,24 +9,41 @@ local process = require("@lune/process")
 local data = require("data.luau")
 
 local inventoryFile = "save/inventory.txt"
+local progressFile = "save/last.txt"
 
-function module.init(startAt: number): number?
-    if startAt ~= 1 then
-        local confirmed = stdio.prompt("confirm", `Save found. Continue from last save? (Progression: {module.calculateProgress(startAt)}%)`, { "Yes", "No" })
+local ongoing = false
+
+function module.init(): number
+    module.ensureSave()
+
+    local startAt = tonumber(fs.readFile(progressFile))
+
+    if startAt == 0 then
+        module.typeWrite({
+            "Game over.",
+            "\n"
+        })
+    end
+
+    if startAt > 1 and not ongoing then
+        local confirmed = stdio.prompt("confirm", `Save found. Continue from last save? (Progression: {module.calculateProgress(startAt)}%)`, { "Yes", "Restart" })
         if not confirmed then
             startAt = 1
         end
     end
 
+    ongoing = true
+
     for i = startAt, #data do
         local dialogData = data[i]
 
         if typeof(dialogData) == "string" then
-            module.typeWrite(string.format(dialogData, process.env["USERNAME"]:lower()))
+            module.typeWrite({
+                string.format(dialogData, process.env["USERNAME"]:lower())
+            })
         elseif typeof(dialogData) == "table" then
             local options = {}
-
-            for option, messages in pairs(dialogData.options) do
+            for option, _ in dialogData.options do
                 table.insert(options, option)
             end
 
@@ -42,116 +59,115 @@ function module.init(startAt: number): number?
             if optionData.required then
                 local hasItem = module.hasItem(optionData.required)
                 if hasItem then
-                    for i, message in pairs(optionData.messages[2]) do
-                        module.typeWrite(message)
-                    end
-
+                    module.typeWrite(optionData.messages[2])
                     module.addItem(optionData.required)
 
                     printed = true
                 else
-                    for i, message in pairs(optionData.messages[1]) do
-                        module.typeWrite(message)
-                    end
-
-                    if optionData.dead then
-                        module.init(1)
-                        return 1
-                    end
+                    module.typeWrite(optionData.messages[1])
                 end
             elseif optionData.item then
                 if optionData.cannotSkip then
                     local hasItem = module.hasItem(optionData.item)
                     if hasItem then
-                        for i, message in pairs(optionData.messages[2]) do
-                            module.typeWrite(message)
-                        end
+                        module.typeWrite(optionData.messages[2])
                     else
-                        for i, message in pairs(optionData.messages[1]) do
-                            module.typeWrite(message)
-                        end
-    
+                        module.typeWrite(optionData.messages[1])
                         module.addItem(optionData.item)
                     end
                 else
-                    for i, message in pairs(optionData.messages) do
-                        module.typeWrite(message)
-                    end
-
+                    module.typeWrite(optionData.messages)
                     module.addItem(optionData.item)
                 end
 
                 printed = true
-            end
-            
-            if optionData.dead then
-                for i, message in pairs(optionData.messages) do
-                    module.typeWrite(message)
-                end
+            elseif optionData.ending then
+                module.typeWrite(optionData.messages)
+                module.typeWrite({
+                    "\n",
+                    `Je heb een nieuw eind bereikt: {optionData.ending}!`
+                })
 
-                module.init(1)
-                return 1
+                module.resetSave()
+                return 0
             end
 
             if not printed then
-                for i, message in pairs(optionData) do
-                    module.typeWrite(message)
-                end
+                module.typeWrite(optionData)
             end
 
-            if not module.hasItem(optionData.required) then
-                module.init(i)
+            if optionData.required and not module.hasItem(optionData.required) then
                 return i
             end
         end
 
         task.wait(1)
-        fs.writeFile("save/last.txt", tostring(i))
+        fs.writeFile(progressFile, tostring(i))
     end
 
-    return nil
+    warn("Mogelijk foutje opgetreden")
+    return 1
+end
+
+function module.resetSave()
+    fs.writeFile(progressFile, "0")
+    fs.writeFile(inventoryFile, "")
+end
+
+function module.ensureSave()
+    if not fs.isDir("save") then
+        fs.writeDir("save")
+    end
+
+    if not fs.isFile(inventoryFile) then
+        fs.writeFile(inventoryFile, "")
+    end
+
+    if not fs.isFile(progressFile) then
+        fs.writeFile(progressFile, "1")
+    end
 end
 
 function module.calculateProgress(progress: number): number
     return math.floor(progress / #data * 100)
 end
 
-function module.typeWrite(text: string)
-    local characters = text:split("")
-    local wordCount = #text:split(" ")
-
-    local waitTime = 0.05
-    local firstChar = string.sub(text, 1, 1)
-
-    if firstChar == "." then
-        waitTime = 0.5
-    end
-
-    if firstChar == "*" then
-        stdio.write("! ")
-    else
-        stdio.write("> ")
-    end
-
-    for i, char in pairs(characters) do
-        stdio.write(char)
-        
-        if char ~= " " then
-            task.wait(waitTime)
+function module.typeWrite(messages: { string })
+    for i, text in ipairs(messages) do
+        local characters = text:split("")
+        local wordCount = #text:split(" ")
+    
+        local waitTime = 0.05
+        local firstChar = string.sub(text, 1, 1)
+    
+        if firstChar == "." then
+            waitTime = 0.5
         end
+    
+        if firstChar == "*" then
+            stdio.write("! ")
+        else
+            stdio.write("> ")
+        end
+    
+        for i, char in pairs(characters) do
+            stdio.write(char)
+            
+            if char ~= " " then
+                task.wait(waitTime)
+            end
+        end
+    
+        stdio.write("\n")
+        task.wait(wordCount / 40)
     end
-
-    stdio.write("\n")
-    task.wait(wordCount / 40)
 end
 
 function module.write(data: { string })
-    warn("writing")
     fs.writeFile(inventoryFile, table.concat(data, "&"))
 end
 
 function module.read() : { string }
-    warn("reading")
     return string.split(tostring(fs.readFile(inventoryFile)), "&")
 end
 
