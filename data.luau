@@ -123,9 +123,8 @@ return {
                     "*je toetst de 4 nummers in*",
                     ". . .",
                     "explosieven ontploffen in de kluis",
-                    "*je ziet niks*",
-                    ". . .",
-                    "*je voelt jouw lichaamsdelen niet meer*"
+                    "*je ziet opeens niets meer*",
+                    ". . ."
                 }
             },
             ["probeer 5736"] = {
@@ -134,9 +133,8 @@ return {
                     "*je toetst de 4 nummers in*",
                     ". . .",
                     "explosieven ontploffen in de kluis",
-                    "*je ziet niks*",
-                    ". . .",
-                    "*je voelt jouw lichaamsdelen niet meer*"
+                    "*je ziet opeens niets meer*",
+                    ". . ."
                 }
             },
             ["probeer 5385"] = {
@@ -145,6 +143,7 @@ return {
                     "*je toetst de 4 nummers in*",
                     ". . .",
                     "pling! de kluisdeur gaat open",
+                    "bewaker achter je: 'hey! wat doe jij hier?'",
                 }
             },
             ["probeer 5937"] = {
@@ -153,9 +152,8 @@ return {
                     "*je toetst de 4 nummers in*",
                     ". . .",
                     "explosieven ontploffen in de kluis",
-                    "*je ziet niks*",
-                    ". . .",
-                    "*je voelt jouw lichaamsdelen niet meer*"
+                    "*je ziet opeens niets meer*",
+                    ". . ."
                 }
             },
         },

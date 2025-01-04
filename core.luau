@@ -11,6 +11,13 @@ local data = require("data.luau")
 local inventoryFile = "save/inventory.txt"
 
 function module.init(startAt: number): number?
+    if startAt ~= 1 then
+        local confirmed = stdio.prompt("confirm", `Save found. Continue from last save? (Progression: {module.calculateProgress(startAt)}%)`, { "Yes", "No" })
+        if not confirmed then
+            startAt = 1
+        end
+    end
+
     for i = startAt, #data do
         local dialogData = data[i]
 
@@ -99,9 +106,14 @@ function module.init(startAt: number): number?
         end
 
         task.wait(1)
+        fs.writeFile("save/last.txt", tostring(i))
     end
 
     return nil
+end
+
+function module.calculateProgress(progress: number): number
+    return math.floor(progress / #data * 100)
 end
 
 function module.typeWrite(text: string)

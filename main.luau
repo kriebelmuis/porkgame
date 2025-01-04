@@ -1,6 +1,7 @@
 local core = require("core.luau")
+local fs = require("@lune/fs")
 
-local last = 1
+local last = tonumber(fs.readFile("save/last.txt"))
 
 repeat
     last = core.init(last)
