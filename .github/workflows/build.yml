@@ -25,5 +25,11 @@ jobs:
       - name: Unzip Lune
         run: unzip lune.zip && sync
 
+      - name: List extracted files
+        run: ls -lh
+
+      - name: Make lune executable
+        run: chmod +x lune
+
       - name: Compile binary
-        run: lune -o game.exe -t linux-x86_64
+        run: ./lune -o game.exe -t linux-x86_64
