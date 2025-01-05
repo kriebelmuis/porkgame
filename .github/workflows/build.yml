@@ -1,0 +1,31 @@
+name: Build
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+    
+      - name: Install dependencies
+        run: sudo apt install curl && sudo apt install unzip
+
+      - name: Download compiler
+        run: curl -o compiler.zip https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip
+
+      - name: Unzip compiler
+        run: unzip compiler.zip
+
+      - name: Compile linux binary
+        run: lune.exe -o game.exe -t linux-x86_64
