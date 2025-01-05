@@ -16,16 +16,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-    
       - name: Install dependencies
         run: sudo apt install curl && sudo apt install unzip
 
-      - name: Download compiler
-        run: curl -o compiler.zip https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip
+      - name: Download Lune
+        run: curl https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip > lune.zip
 
-      - name: Unzip compiler
-        run: unzip compiler.zip
+      - name: Unzip Lune
+        run: unzip lune.zip
 
-      - name: Compile linux binary
+      - name: Compile binary
         run: lune.exe -o game.exe -t linux-x86_64
