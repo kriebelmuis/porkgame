@@ -20,7 +20,7 @@ jobs:
         run: sudo apt install curl && sudo apt install unzip
 
       - name: Download Lune
-        run: curl https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip > lune.zip
+        run: curl -L -f https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip > lune.zip
 
       - name: Unzip Lune
         run: unzip lune.zip
