@@ -193,4 +193,6 @@ function module.hasItem(item: string)
     end
 end
 
+module.init()
+
 return module
