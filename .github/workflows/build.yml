@@ -35,7 +35,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Process code
-        run: ~/.aftman/bin/darklua process main.luau main.bundled.luau
+        run: ./darklua process main.luau main.bundled.luau
       
       - name: Compile Linux binary
         run: ./lune build main.bundled.luau -o game -t pork-linux-x86_64
