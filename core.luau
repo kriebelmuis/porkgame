@@ -6,7 +6,7 @@ local task = require("@lune/task")
 local fs = require("@lune/fs")
 local process = require("@lune/process")
 
-local data = require("data.luau")
+local data = require("./data.luau")
 
 local inventoryFile = "save/inventory.txt"
 local progressFile = "save/last.txt"
@@ -192,7 +192,5 @@ function module.hasItem(item: string)
         return true
     end
 end
-
-module.init()
 
 return module

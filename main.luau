@@ -1,4 +1,4 @@
-local core = require("core.luau")
+local core = require("./core.luau")
 
 repeat
     core.init()
