@@ -38,13 +38,13 @@ jobs:
         run: darklua process main.luau main.bundled.luau
       
       - name: Compile Linux binary
-        run: ./lune build main.bundled.luau -o game -t pork-linux-x86_64
+        run: ./lune build main.bundled.luau -o pork-game-linux -t linux-x86_64
 
       - name: Compile Windows binary
-        run: ./lune build main.bundled.luau -o game.exe -t pork-windows-x86_64
+        run: ./lune build main.bundled.luau -o pork-game.exe -t windows-x86_64
 
       - name: Compile MacOS binary
-        run: ./lune build main.bundled.luau -o game-macos -t pork-macos-x86_64
+        run: ./lune build main.bundled.luau -o pork-game-macos -t macos-x86_64
 
       - name: Create Release
         id: create_release
@@ -63,7 +63,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./game.exe
+          asset_path: ./pork-game.exe
           asset_name: pork-windows-x86_64.exe
           asset_content_type: application/octet-stream
 
@@ -73,7 +73,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./game-macos
+          asset_path: ./pork-game-macos
           asset_name: pork-macos-x86_64
           asset_content_type: application/octet-stream
 
@@ -84,6 +84,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./game
+          asset_path: ./pork-game-linux
           asset_name: pork-linux-x86_64
           asset_content_type: application/octet-stream
