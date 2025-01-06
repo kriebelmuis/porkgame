@@ -5,18 +5,30 @@ local stdio = require("@lune/stdio")
 local task = require("@lune/task")
 local fs = require("@lune/fs")
 local process = require("@lune/process")
+local serde = require("@lune/serde")
 
 local data = require("./data.luau")
 
-local inventoryFile = "save/inventory.txt"
-local progressFile = "save/last.txt"
+local saveFile = "save.toml"
+
+local DefaultSaveData = {
+    inventory = {},
+    endings = {},
+    checkPoint = 1
+} :: SaveData
+
+type SaveData = {
+    inventory: { string },
+    endings: { string },
+    checkPoint: number
+}
 
 local ongoing = false
 
 function module.init(): number
     module.ensureSave()
 
-    local startAt = tonumber(fs.readFile(progressFile))
+    local startAt = tonumber(module.readSave().checkPoint) or 1
 
     if startAt == 0 then
         module.typeWrite({
@@ -25,7 +37,7 @@ function module.init(): number
         })
     end
 
-    if startAt > 1 and not ongoing then
+    if startAt >= 1 and not ongoing then
         local confirmed = stdio.prompt("confirm", `Save found. Continue from last save? (Progression: {module.calculateProgress(startAt)}%)`, { "Yes", "Restart" })
         if not confirmed then
             startAt = 1
@@ -83,12 +95,28 @@ function module.init(): number
                 printed = true
             elseif optionData.ending then
                 module.typeWrite(optionData.messages)
-                module.typeWrite({
-                    "\n",
-                    `Je heb een nieuw eind bereikt: {optionData.ending}!`
-                })
 
-                module.resetSave()
+                local saveData = module.readSave()
+                local gotEnding = table.find(saveData.endings, optionData.ending)
+
+                if not gotEnding or gotEnding <= 0 then
+                    table.insert(saveData.endings, optionData.ending)
+
+                    module.typeWrite({
+                        "\n",
+                        `Je hebt het einde "{optionData.ending}" bereikt`
+                    })
+                else
+                    module.typeWrite({
+                        "\n",
+                        "Je hebt dit einde al bereikt"
+                    })
+                end
+
+                saveData.checkPoint = 1
+                saveData.inventory = {}
+
+                module.writeSave(saveData)
                 return 0
             end
 
@@ -102,29 +130,19 @@ function module.init(): number
         end
 
         task.wait(1)
-        fs.writeFile(progressFile, tostring(i))
+        local saveData = module.readSave()
+        saveData.checkPoint = i
+
+        module.writeSave(saveData)
     end
 
     warn("Mogelijk foutje opgetreden")
     return 1
 end
 
-function module.resetSave()
-    fs.writeFile(progressFile, "0")
-    fs.writeFile(inventoryFile, "")
-end
-
 function module.ensureSave()
-    if not fs.isDir("save") then
-        fs.writeDir("save")
-    end
-
-    if not fs.isFile(inventoryFile) then
-        fs.writeFile(inventoryFile, "")
-    end
-
-    if not fs.isFile(progressFile) then
-        fs.writeFile(progressFile, "1")
+    if not fs.isFile(saveFile) then
+        module.writeSave(DefaultSaveData)
     end
 end
 
@@ -163,28 +181,28 @@ function module.typeWrite(messages: { string })
     end
 end
 
-function module.write(data: { string })
-    fs.writeFile(inventoryFile, table.concat(data, "&"))
+function module.writeSave(save: SaveData)
+    fs.writeFile(saveFile, serde.encode("toml", save))
 end
 
-function module.read() : { string }
-    return string.split(tostring(fs.readFile(inventoryFile)), "&")
+function module.readSave(): SaveData
+    return serde.decode("toml", fs.readFile(saveFile))
 end
 
 function module.addItem(item: string)
-    local inventory = module.read()
-    table.insert(inventory, item)
-    module.write(inventory)
+    local saveData = module.readSave()
+    table.insert(saveData.inventory, item)
+    module.writeSave(saveData)
 end
 
 function module.removeItem(item: string)
-    local inventory = module.read()
-    table.remove(inventory, table.find(inventory, item))
-    module.write(inventory)
+    local saveData = module.readSave()
+    table.remove(saveData.inventory, table.find(saveData.inventory, item))
+    module.writeSave(saveData)
 end
 
-function module.hasItem(item: string)
-    local found = table.find(module.read(), item)
+function module.hasItem(item: string): boolean
+    local found = table.find(module.readSave().inventory, item)
 
     if not found or found <= 0 then
         return false
