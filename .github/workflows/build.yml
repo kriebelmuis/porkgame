@@ -34,7 +34,7 @@ jobs:
         run: unzip lune.zip && chmod +x lune && unzip aftman.zip && chmod +x aftman
 
       - name: Install toolchain dependencies
-        run: ./aftman self-install && echo "$HOME/.aftman/bin" >> "$GITHUB_PATH" && aftman add seaofvoices/darklua && ./aftman install
+        run: ./aftman self-install && echo "$HOME/.aftman/bin" >> "$GITHUB_PATH" && ./aftman add seaofvoices/darklua && ./aftman install
 
       - name: Process code
         run: ~/.aftman/bin/darklua process main.luau main.bundled.luau
