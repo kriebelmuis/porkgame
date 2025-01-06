@@ -34,10 +34,10 @@ jobs:
         run: unzip lune.zip && chmod +x lune && unzip aftman.zip && chmod +x aftman
 
       - name: Install toolchain dependencies
-        run: ./aftman self-install && aftman install
+        run: ./aftman self-install && ~/.aftman/bin/aftman install
 
       - name: Process code
-        run: darklua process main.luau main.bundled.luau
+        run: ~/.aftman/bin/darklua process main.luau main.bundled.luau
       
       - name: Compile Linux binary
         run: ./lune build main.bundled.luau -o game -t pork-linux-x86_64
