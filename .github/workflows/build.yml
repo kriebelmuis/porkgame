@@ -27,14 +27,12 @@ jobs:
       - name: Download Lune
         run: curl -L -f https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip > lune.zip
 
-      - name: Download Aftman
-        run: curl -L -f https://github.com/LPGhatguy/aftman/releases/download/v0.3.0/aftman-0.3.0-linux-x86_64.zip > aftman.zip
-
       - name: Unzip dependencies
-        run: unzip lune.zip && chmod +x lune && unzip aftman.zip && chmod +x aftman
+        run: unzip lune.zip && chmod +x lune
 
-      - name: Install toolchain dependencies
-        run: ./aftman self-install && echo "$HOME/.aftman/bin" >> "$GITHUB_PATH" && ./aftman add seaofvoices/darklua && ./aftman install
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Process code
         run: ~/.aftman/bin/darklua process main.luau main.bundled.luau
