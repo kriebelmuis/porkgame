@@ -1,6 +1,6 @@
 local stdio = require("@lune/stdio")
 
-local core = require("core.luau")
+local core = require("./core.luau")
 
 stdio.write(stdio.color("red"))
 stdio.ewrite([[
