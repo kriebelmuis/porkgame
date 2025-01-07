@@ -9,19 +9,20 @@ local serde = require("@lune/serde")
 
 local data = require("./data.luau")
 
-local saveFile = "save.toml"
-
-local DefaultSaveData = {
-    inventory = {},
-    endings = {},
-    checkPoint = 1
-} :: SaveData
+local saveFolder = `{process.env["LOCALAPPDATA"]}\\Hit Game Pork Life`
+local saveFile = `{saveFolder}\\save.toml`
 
 type SaveData = {
     inventory: { string },
     endings: { string },
     checkPoint: number
 }
+
+local DefaultSaveData = {
+    inventory = {},
+    endings = {},
+    checkPoint = 1
+} :: SaveData
 
 local ongoing = false
 
@@ -142,6 +143,10 @@ function module.init(): number
 end
 
 function module.ensureSave()
+    if not fs.isDir(saveFolder) then
+        fs.writeDir(saveFolder)
+    end
+
     if not fs.isFile(saveFile) then
         module.writeSave(DefaultSaveData)
     end
