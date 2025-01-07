@@ -1,16 +1,9 @@
 name: Build
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
-    tags:
-      - "v*"
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    tags: [ "v*" ]
   workflow_dispatch:
 
 permissions:
@@ -22,24 +15,25 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-    
-      - name: Install dependencies
-        run: sudo apt install -y curl && sudo apt install -y unzip
 
-      - name: Download Lune
-        run: curl -L -f https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip > lune.zip
+      - name: Download and unzip Lune
+        run: |
+          curl -L -f https://github.com/lune-org/lune/releases/download/v0.8.9/lune-0.8.9-linux-x86_64.zip > lune.zip
+          unzip lune.zip
+          chmod +x lune
 
-      - name: Unzip Lune
-        run: unzip lune.zip && chmod +x lune
-      
-      - name: Compile Linux binary
-        run: ./lune build core.luau -o game -t linux-x86_64
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Compile Windows binary
-        run: ./lune build core.luau -o game.exe -t windows-x86_64
+      - name: Process code
+        run: darklua process main.luau main.bundled.luau
 
-      - name: Compile MacOS binary
-        run: ./lune build core.luau -o game-macos -t macos-x86_64
+      - name: Compile binaries
+        run: |
+          ./lune build main.bundled.luau -o pork-game-linux -t linux-x86_64
+          ./lune build main.bundled.luau -o pork-game.exe -t windows-x86_64
+          ./lune build main.bundled.luau -o pork-game-macos -t macos-x86_64
 
       - name: Create Release
         id: create_release
@@ -51,6 +45,7 @@ jobs:
           release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+        if: startsWith(github.ref, 'refs/tags/')
 
       - name: Upload Windows Release Asset
         uses: actions/upload-release-asset@v1
@@ -58,9 +53,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./game.exe
-          asset_name: windows-x86_64.exe
+          asset_path: pork-game.exe
+          asset_name: pork-windows-x86_64.exe
           asset_content_type: application/octet-stream
+        if: startsWith(github.ref, 'refs/tags/')
 
       - name: Upload MacOs Release Asset
         uses: actions/upload-release-asset@v1
@@ -68,17 +64,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./game-macos
-          asset_name: macos-x86_64
+          asset_path: pork-game-macos
+          asset_name: pork-macos-x86_64
           asset_content_type: application/octet-stream
+        if: startsWith(github.ref, 'refs/tags/')
 
-        
       - name: Upload Linux Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./game
-          asset_name: linux-x86_64
+          asset_path: pork-game-linux
+          asset_name: pork-linux-x86_64
           asset_content_type: application/octet-stream
+        if: startsWith(github.ref, 'refs/tags/')
