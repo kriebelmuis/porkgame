@@ -26,7 +26,7 @@ function module.init(): number
     end
 
     if startAt > 1 and not ongoing then
-        local confirmed = stdio.prompt("confirm", `Save found. Continue from last save? (Progression: {module.calculateProgress(startAt)}%)`, { "Yes", "Restart" })
+        local confirmed = stdio.prompt("select", `Current save progression: {module.calculateProgress(startAt)}%`, { "Continue", "New Game" }) == 1
         if not confirmed then
             startAt = 1
         end
@@ -97,6 +97,7 @@ function module.init(): number
             end
 
             if optionData.required and not module.hasItem(optionData.required) then
+                warn"no item"
                 return i
             end
         end
@@ -192,7 +193,5 @@ function module.hasItem(item: string)
         return true
     end
 end
-
-module.init()
 
 return module
