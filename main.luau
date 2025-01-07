@@ -1,9 +1,9 @@
-local stdio = require("@lune/stdio")
-
 local core = require("./core.luau")
 
-
-
-repeat
+local ok, err = pcall(function()
     core.init()
-until false
+end)
+
+if not ok then
+    warn(`An fatal error occoured!\n\n{err}`)
+end
