@@ -3,11 +3,13 @@ local module = {}
 -- std
 local stdio = require("@lune/stdio")
 local task = require("@lune/task")
-local fs = require("@lune/fs")
 local process = require("@lune/process")
-local serde = require("@lune/serde")
 
-local data = require("./data.luau")
+-- components
+local save = require("./modules/save.luau")
+local data = require("./modules/data.luau")
+
+local dialogInstances = #data
 
 local saveFolder = `{process.env["LOCALAPPDATA"]}\\Hit Game Pork Life`
 local saveFile = `{saveFolder}\\save.toml`
@@ -31,10 +33,11 @@ local DefaultSaveData = {
 local ongoing = false
 
 function module.init(): number
-    module.ensureSave()
+    module.waterMark()
+    save.ensureSave()
 
-    local startAt = tonumber(module.readSave().checkPoint) or 1
-
+    -- start bij de laatst opgeslagen checkpoint
+    local startAt = tonumber(save.readSave().checkPoint) or 1
     if startAt == 0 then
         module.typeWrite({
             "\n",
@@ -43,6 +46,10 @@ function module.init(): number
         })
     end
 
+    -- klein wachtje voor het watermarkje of net dood was gegaan
+    task.wait(3)
+
+    -- als de speler al een keer is begonnen, vraag of hij verder wilt gaan
     if startAt > 1 and not ongoing then
         local confirmed = stdio.prompt("select", `Current save progression: {module.calculateProgress(startAt)}%`, { "Continue", "New Game" }) == 1
         if not confirmed then
@@ -50,15 +57,24 @@ function module.init(): number
         end
     end
 
+    module.clearConsole()
+
     ongoing = true
 
-    for i = startAt, #data do
+    -- main loop
+    for i = startAt, dialogInstances do
         local dialogData = data[i]
 
+        -- simpele dialog
         if typeof(dialogData) == "string" then
+            -- typeWrite functie is eigenlijk gemaakt voor meer dan 1 string, maar dit is een uitzondering
+            -- string.format gebruik ik om de naam van de gebruiker te krijgen in data.luau
+
             module.typeWrite({
                 string.format(dialogData, process.env["USERNAME"]:lower())
             })
+
+        -- geavanceerde dialog
         elseif typeof(dialogData) == "table" then
             local options = {}
             for option, _ in dialogData.options do
@@ -67,102 +83,134 @@ function module.init(): number
 
             stdio.write("\n")
 
+            -- selectie prompt van de runtime (GEEN EXTERNAL LIBRARY)
             local input = stdio.prompt("select", dialogData.dialog, options)
             local optionData = dialogData.options[options[input]]
 
-            stdio.write("\n")
+            module.clearConsole()
 
             local printed = false
 
+            -- deze actie vereist een item om in de inventory te hebben
             if optionData.required then
-                local hasItem = module.hasItem(optionData.required)
+                local hasItem = save.hasItem(optionData.required)
                 if hasItem then
                     module.typeWrite(optionData.messages[2])
-                    module.addItem(optionData.required)
+                    save.addItem(optionData.required)
 
                     printed = true
                 else
                     module.typeWrite(optionData.messages[1])
                 end
+
+            -- deze actie geeft een item aan de speler
             elseif optionData.item then
                 if optionData.cannotSkip then
-                    local hasItem = module.hasItem(optionData.item)
+                    local hasItem = save.hasItem(optionData.item)
+
+                    -- laat een generiek berichtje zien als de speler het item al heeft
                     if hasItem then
                         module.typeWrite(optionData.messages[2])
                     else
                         module.typeWrite(optionData.messages[1])
-                        module.addItem(optionData.item)
+
+                        module.typeWrite({
+                            `* Je hebt een {optionData.item} gevonden, +2 PorkCoin! *`
+                        })
+                        save.incrementPorkCoin(2)
+                        save.addItem(optionData.item)
                     end
+                -- ... hier is dat niet nodig met skippable items (speler komt maar 1x langs)
                 else
                     module.typeWrite(optionData.messages)
-                    module.addItem(optionData.item)
+                    save.addItem(optionData.item)
                 end
 
                 printed = true
+
+            -- deze actie geeft een eind van het spel aan
             elseif optionData.ending then
                 module.typeWrite(optionData.messages)
 
-                local saveData = module.readSave()
+                local saveData = save.readSave()
                 local gotEnding = table.find(saveData.endings, optionData.ending)
 
                 if not gotEnding or gotEnding <= 0 then
+                    -- voeg ending toe aan array, ook een porkcoin voor gokken
                     table.insert(saveData.endings, optionData.ending)
+                    saveData.porkCoin += 5
 
                     module.typeWrite({
                         "\n",
-                        `Je hebt het einde "{optionData.ending}" bereikt`
+                        `Je hebt het einde "{optionData.ending}" bereikt`,
+                        "+5 PorkCoin! Sucess met gokken!"
                     })
+
+                    task.wait(3)
                 else
+                    -- einde al bereikt, geen beloning
                     module.typeWrite({
                         "\n",
                         "Je hebt dit einde al bereikt"
                     })
                 end
 
+                -- reset belangrijke informatie
                 saveData.checkPoint = 1
                 saveData.inventory = {}
 
-                module.writeSave(saveData)
+                save.writeSave(saveData)
                 return 0
             end
 
+            -- geen bijzondere actie, print de array van messages
             if not printed then
                 module.typeWrite(optionData)
+                return i
             end
 
-            if optionData.required and not module.hasItem(optionData.required) then
-                warn"no item"
+            -- blijkbaar was er bij deze actie een item nodig, omdat de gebruiker deze niet had, geef hem weer de kans om te kiezen
+            if optionData.required and not save.hasItem(optionData.required) then
                 return i
             end
         end
 
         task.wait(1)
-        local saveData = module.readSave()
+
+        -- save progressie
+        local saveData = save.readSave()
         saveData.checkPoint = i
 
-        module.writeSave(saveData)
+        save.writeSave(saveData)
     end
 
-    warn("Mogelijk foutje opgetreden")
     return 1
 end
 
-function module.ensureSave()
-    if not fs.isDir(saveFolder) then
-        fs.writeDir(saveFolder)
-    end
+-- de linter deze walgelijke string laten toestaan
+-- selene: allow(bad_string_escape)
+function module.clearConsole()
+    stdio.write("\x1b[2J\x1b[H")
+end
 
-    if not fs.isFile(saveFile) then
-        module.writeSave(DefaultSaveData)
-    end
+function module.waterMark()    
+    stdio.write(`{stdio.color("green")}`)
+    stdio.write(stdio.style("bold"))
+    
+    stdio.write("\n© 2025 NegroTech Egypt, (Inc, LLC, Corp). All rights reserved. \n\n")
+    
+    stdio.write(stdio.color("reset"))
+    
+    stdio.write("####################################################################\n\n")
+    stdio.write(stdio.style("reset"))
 end
 
 function module.calculateProgress(progress: number): number
-    return math.floor(progress / #data * 100)
+    return math.floor(progress / dialogInstances * 100)
 end
 
 function module.typeWrite(messages: { string })
-    for i, text in ipairs(messages) do
+    for _, text in messages do
         local characters = text:split("")
         local wordCount = #text:split(" ")
     
@@ -174,12 +222,12 @@ function module.typeWrite(messages: { string })
         end
     
         if firstChar == "*" then
-            stdio.write("! ")
+            stdio.write(`{stdio.color("red")}\n! {stdio.color("reset")}`)
         else
             stdio.write("> ")
         end
     
-        for i, char in pairs(characters) do
+        for _, char in pairs(characters) do
             stdio.write(char)
             
             if char ~= " " then
@@ -189,36 +237,6 @@ function module.typeWrite(messages: { string })
     
         stdio.write("\n")
         task.wait(wordCount / 40)
-    end
-end
-
-function module.writeSave(save: SaveData)
-    fs.writeFile(saveFile, serde.encode("toml", save))
-end
-
-function module.readSave(): SaveData
-    return serde.decode("toml", fs.readFile(saveFile))
-end
-
-function module.addItem(item: string)
-    local saveData = module.readSave()
-    table.insert(saveData.inventory, item)
-    module.writeSave(saveData)
-end
-
-function module.removeItem(item: string)
-    local saveData = module.readSave()
-    table.remove(saveData.inventory, table.find(saveData.inventory, item))
-    module.writeSave(saveData)
-end
-
-function module.hasItem(item: string): boolean
-    local found = table.find(module.readSave().inventory, item)
-
-    if not found or found <= 0 then
-        return false
-    else
-        return true
     end
 end
 

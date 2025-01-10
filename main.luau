@@ -1,27 +1,9 @@
-local stdio = require("@lune/stdio")
-
 local core = require("./core.luau")
 
-stdio.write(stdio.color("red"))
---[[stdio.ewrite([[
-
-███╗░░██╗███████╗░██████╗░██████╗░░█████╗░████████╗███████╗░█████╗░██╗░░██╗
-████╗░██║██╔════╝██╔════╝░██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗██║░░██║
-██╔██╗██║█████╗░░██║░░██╗░██████╔╝██║░░██║░░░██║░░░█████╗░░██║░░╚═╝███████║
-██║╚████║██╔══╝░░██║░░╚██╗██╔══██╗██║░░██║░░░██║░░░██╔══╝░░██║░░██╗██╔══██║
-██║░╚███║███████╗╚██████╔╝██║░░██║╚█████╔╝░░░██║░░░███████╗╚█████╔╝██║░░██║
-╚═╝░░╚══╝╚══════╝░╚═════╝░╚═╝░░╚═╝░╚════╝░░░░╚═╝░░░╚══════╝░╚════╝░╚═╝░░╚═╝
-]]
-
---]]
-
-stdio.write(stdio.color("reset"))
-stdio.write(stdio.style("bold"))
-
-stdio.write("\n© 2025 NegroTech Egypt, (Inc, LLC, Corp). All rights reserved. \n\n")
-stdio.write("####################################################################\n\n")
-stdio.write(stdio.style("reset"))
-
-repeat
+local ok, err = pcall(function()
     core.init()
-until false
+end)
+
+if not ok then
+    warn(`An fatal error occoured!\n\n{err}`)
+end
