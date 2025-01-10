@@ -1,210 +1,267 @@
 return {
-    "onbekende stem: 'word wakker, %s...'",
-    "*je wordt wakker*",
-    "waar ben ik? ik kan me niks herinneren...",
-    ". . .",
-    "het lijkt erop dat ik in een gevangeniscel zit",
-    "ik zie een celdeur, een raam en een bed om mij heen",
+    "Je zit vast in John Pork's gevangenis",
     {
-        dialog = "hoe ga ik ontsnappen?",
+        dialog = "Ontsnap?",
         options = {
-            ["probeer de celdeur te openen"] = {
-                required = "cel sleutel",
+            ["Ja"] = {
                 messages = {
-                    {
-                        "*je probeert de celdeur te openen*",
-                        ". . .",
-                        "de celdeur zit op slot",
-                        "je kunt de celdeur niet openen",
-                    },
-                    {
-                        "*je gebruikt de celsleutel*",
-                        ". . .",
-                        "*de metalen celdeur piept luid*",
-                        "de celdeur gaat open!",
-                    }
+                    "Je besluit te ontsnappen en begint te planen."
                 }
             },
-            ["kijk door het raam"] = {
-                "*je kijkt door het raam*",
-                ". . .",
-                "je ziet een paar bewakers lopen",
-                "ze hebben een opvallende sleutelbos bij zich, misschien moet ik dat onthouden",
-            },
-            ["ga op het bed liggen"] = {
-                item = "cel sleutel",
-                cannotSkip = true,
+            ["Nee"] = {
+                ending = "gevangen blijven",
                 messages = {
-                    {
-                        "*je gaat op het bed liggen*",
-                        ". . .",
-                        "je voelt iets onder het kussen",
-                        "*je vindt een envelop*",
-                        ". . .",
-                        "er zit een sleutel in!",
-                    },
-                    {
-                        "*je gaat op het bed liggen*",
-                        ". . .",
-                        "er is niets bijzonders te vinden",
-                    }
+                    "Je blijft in de gevangenis ongevoed voor jaren lang.",
+                    "John Pork is een duistere man en je moet hem niet vergeten."
                 }
             }
         }
     },
-    "je ontsnapte uit de cel, je zit in een soort kelder",
-    "je neem de trap naar boven",
-    "de hoofddeur naar buiten is verassend genoeg niet op slot",
-    "*doet de deur open*",
-    ". . .",
-    "opeens ben je in een grote gang terecht",
-    "je wandel rustig door de gangen, er zijn allemaal vasen op tafeltjes te vinden",
-    "en schilderijen aan de muur",
-    "je hoort stemmen in de verte, mogelijk bewakers",
-    "*je verstopt je achter een tafeltje met vasen*",
-    "relaxde bewaker: 'ey heb je laatst die nieuwe serie bekeken?'",
-    "bewaker met bril: 'nee, ik kijk eigenlijk een series. ik lees alleen boeken'",
-    "relaxde bewaker: 'boeken? wat ben jij? een fucking nerd? *slaat bewaker met bril op rug*'",
-    "*een sleutelbos valt op de grond*",
-    "het lijkt alsof de bewakers niet door hadden dat ze hun sleutelbos lieten vallen",
-    "zou ik de sleutelbos op pakken? of is dat te gevaarlijk?",
+    "Je bent in de gevangeniscel",
     {
-        dialog = "pak je de sleutelbos op?",
+        dialog = "Hoe ontsnap je?",
         options = {
-            ["laat de sleutelbos liggen"] = {
-                ending = "gepakt door camera",
+            ["Slot kraken"] = {
                 messages = {
-                    "je loopt verder door de gang",
-                    ". . .",
-                    "*piep* *piep* *piep*",
-                    "wat hoor ik piepen?",
-                    "*je kijkt achter je*",
-                    "een camera heeft je door!"
+                    "Je probeert het slot te kraken, maar het lukt niet. Einde."
                 }
             },
-            ["pak de sleutelbos op"] = {
+            ["Gat graven"] = {
+                messages = {
+                    "Je begint een gat te graven onder de muur heen. . ."
+                }
+            }
+        }
+    },
+    "Je ontsnapte door het gat en zit nu in John Pork's villa",
+    {
+        dialog = "Ontmoet je een medegevangene?",
+        options = {
+            ["Ja, ik ga kijken hoe het met hem gaat"] = {
+                item = "bacon",
+                messages = {
+                    ". . .",
+                    "Je ontmoet Chopped Chin!",
+                    "Je gaat met hem om en ontvangt een stuk bacon als beloning!"
+                }
+            },
+            ["Nee, ik ga alleen"] = {
+                messages = {
+                    "Je besluit het alleen te doen",
+                    ". . ."
+                },
+            }
+        }
+    },
+    "Je bent in de villa",
+    {
+        dialog = "Waar ga je als eerst heen?",
+        options = {
+            ["De keuken"] = {
                 item = "sleutelbos",
                 messages = {
-                    "*je pakt de sleutelbos op*",
-                    ". . .",
-                    "je loopt verder door de gang",
+                    "Je vindt een sleutel in de keuken, bij de ham."
+                }
+            },
+            ["Een slaapkamer"] = {
+                ending = "gepakt slapende pork",
+                messages = {
+                    "*je doet de deur op een kier open*",
+                    "Je hoort iemand snurken?",
+                    "Is het de legende John Pork?",
+                    "Je de deur open en sluipt door de slaapkamer.",
+                    "*pakt rustig de sleutel in de slaapkamer*",
+                    "*knor*",
+                    "*je draait jezelf rustig om*",
+                    "John Pork: 'En wat doe jij hier knul?'"
                 }
             }
         }
     },
-    "je vind een geheime doorgang achter een schilderij",
-    ". . .",
-    "je denk dat je veilig ben",
-    "je loopt door de geheime doorgang en komt in een geheime kamer terecht",
-    "er ligt overal goud en juwelen",
+    "Je bent bij de voordeur",
     {
-        dialog = "neem je goud en juwelen mee?",
+        dialog = "Hoe open je de deur?",
         options = {
-            ["neem wat goud en juwelen mee"] = {
-                messages = {
-                    "*je neemt wat goud en juwelen mee*",
-                    ". . .",
-                    "de juwelen zijn erg zwaar, maar je wil ze wel heel graag mee nemen",
-                    ". . .",
-                    "we nemen ze toch wel mee!",
-                    "*doet schilerij terug*"
-                },
-                item = "juwelen",
-            },
-            ["laat de goud en juwelen liggen"] = {
-                "vaarwel permanente fincaniele onafhankelijkheid",
-                "*zucht*",
-                "*doet schilderij terug*",
-                ". . ."
-            },
-        }
-    },
-    "je loopt verder en vind een kluisdeur, wat zou hierin kunnen zijn?",
-    ". . .",
-    "naast de kluisdeur staat een cijferslot, weet jij de code?",
-    {
-        dialog = "welke code ga je proberen?",
-        options = {
-            ["probeer 3850"] = {
-                ending = "boem",
-                messages = {
-                    "*je toetst de 4 nummers in*",
-                    ". . .",
-                    "explosieven ontploffen in de kluis",
-                    "*je ziet opeens niets meer*",
-                    ". . ."
-                }
-            },
-            ["probeer 5736"] = {
-                ending = "boem",
-                messages = {
-                    "*je toetst de 4 nummers in*",
-                    ". . .",
-                    "explosieven ontploffen in de kluis",
-                    "*je ziet opeens niets meer*",
-                    ". . ."
-                }
-            },
-            ["probeer 5385"] = {
-                ending = "gepakt bij kluis",
-                messages = {
-                    "*je toetst de 4 nummers in*",
-                    ". . .",
-                    "pling! de kluisdeur gaat open",
-                    "bewaker achter je: 'hey! wat doe jij hier?'",
-                }
-            },
-            ["loop verder"] = {
-                "*je toetst de 4 nummers in*",
-                ". . .",
-                "explosieven ontploffen in de kluis",
-                "*je ziet opeens niets meer*",
-                ". . ."
-            },
-        },
-    },
-    "je heb nog een deur gevonden! zou dit de uitgang kunnen zijn?",
-    {
-        dialog = "open de deur?",
-        options = {
-            ["open de deur"] = {
-                required = "sleutelbos",
-                messages = {
-                    {
-                        "*duwt sleutel in de deur*",
-                        ". . .",
-                        "*klik* de deur is ontgrendeld!",
-                    },
-                    {
-                        "*je opent de deur*",
-                        ". . ."
-                    }
-                }
-            }
-        }
-    },
-    {
-        dialog = "hoe ga je de deur open maken?",
-        options = {
-            ["trap de deur open"] = {
-                "*je trapt de deur open met all jouw kracht*",
-                ". . .",
-                "de deur vliegt open, maar maakt opvallend weinig geluid",
-            },
-            ["duw de deur zachtjes open"] = {
+            ["Sloom deur openen"] = {
                 ending = "gepakt bij deur",
                 messages = {
-                    "*Je duwt de deur zachtjes open.*",
-                    ". . .",
-                    "het alarm gaat af!",
-                    "er zit in een bewaker achter je aan!",
-                    "relaxde bewaker: 'stop! in naam van de wet!'",
-                    "*je blijf rennen*",
-                    "de bewaker ontlaad zijn volledige magazine in je rug",
-                    "*je valt dood neer door bloed verlies*"
+                    "Je trapt de deur open, maar wordt gepakt. Einde."
+                }
+            },
+            ["Trap de deur open"] = {
+                ending = "epic win",
+                messages = {
+                    "Je opent de deur zonder problemen. Je bent vrij! Einde."
                 }
             }
         }
     },
-    "je ziet een bewaker naast een boot in de verte",
+    "Je ziet een paar bewakers om de hoek",
+    "Hoe ga je hun afleiden om verder te komen?",
+    {
+        dialog = "Hoe gebruik je de bacon?",
+        options = {
+            ["Leid bewakers af"] = {
+                messages = {
+                    {
+                        "*je zet wat bacon midden in de kamer van de bewakers neer*",
+                        "een bewaker: 'hey kijk daar is wat bacon'",
+                        "een bewaker: 'wat is dat bacon?'",
+                        "*je sluipt verder*"
+                    },
+                    {
+                        "je heb geen bacon om de bewakers af te leiden"
+                    }
+                }
+            },
+            ["Verkoop aan bewakers"] = {
+                required = "bacon",
+                messages = {
+                    {
+                        "*je loop naar de bewakers*",
+                        "wilt u wat bacon",
+                        "hier is de bacon",
+                        "oke vriend succes ermee"
+                    },
+                    {
+                        "*je loop naar de bewakers*",
+                        "wilt u wat bacon",
+                        "waar is de bacon dan?",
+                        ". . .",
+                        "*je ben dood*"
+                    }
+                }
+            },
+            ["Sluip verder"] = {
+                dead = true,
+                messages = {
+                    "je ben gepakt"
+                }
+            }
+        }
+    },
+    "Je bent bij de kluis",
+    {
+        dialog = "Pak je de sleutel?",
+        options = {
+            ["Ja"] = {
+                messages = {
+                    "Je opent de kluis en vindt de masterkey."
+                },
+                item = "masterkey"
+            },
+            ["Nee"] = {
+                ending = "geen sleutel",
+                messages = {
+                    "Zonder sleutel kom je niet verder. Einde."
+                }
+            }
+        }
+    },
+    "Je hebt de masterkey",
+    {
+        dialog = "Ga je naar de boot?",
+        options = {
+            ["Ja"] = {
+                messages = {
+                    "Je gaat naar de boot. . ."
+                }
+            },
+            ["Nee"] = {
+                ending = "gevangen in villa",
+                messages = {
+                    "Je wordt teruggevangen. Einde."
+                }
+            }
+        }
+    },
+    "Je bent bij de boot",
+    {
+        dialog = "Ontmoet je John Pork?",
+        options = {
+            ["Ja, ik praat met hem"] = {
+                messages = {
+                    "Je onderhandelt met Pork en krijgt toestemming om te vertrekken."
+                },
+                next = 12
+            },
+            ["Nee, ik ga direct naar de boot"] = {
+                messages = {
+                    "Je sprint naar de boot en slaagt erin te ontsnappen."
+                },
+                next = 13
+            }
+        }
+    },
+    "Je praat met John Pork",
+    {
+        dialog = "Hoe onderhandel je met Pork?",
+        options = {
+            ["Bied hem bacon aan"] = {
+                messages = {
+                    "Pork accepteert de bacon en laat je gaan."
+                }
+            },
+            ["Dreig hem met de masterkey"] = {
+                ending = "pork is bang",
+                messages = {
+                    "Pork is boos omdat je zijn sleutel hem en maakt je dood."
+                }
+            }
+        }
+    },
+    "Je bent aan boord van de boot",
+    {
+        dialog = "Neem je extra pork producten mee?",
+        options = {
+            ["Ja, ik neem een ham mee"] = {
+                messages = {
+                    "De ham zorgt voor een smakelijke reis."
+                }
+            },
+            ["Nee, ik ga met lege handen"] = {
+                ending = "pork rich",
+                messages = {
+                    "Je gaat met lege handen, maar bent vrij."
+                }
+            }
+        }
+    },
+    "Je zet koers naar de vrijheid",
+    {
+        dialog = "Hoevaar je de boot?",
+        options = {
+            ["Snel wegvoeren"] = {
+                messages = {
+                    "Je vaart snel weg en ontsnappt definitief."
+                }
+            },
+            ["Rustig wegvoeren"] = {
+                messages = {
+                    "Je vaart rustig weg en geniet van je vrijheid."
+                }
+            }
+        }
+    },
+    "Je bent succesvol ontsnapt",
+    {
+        dialog = "Hoe gebruik je de ham?",
+        options = {
+            ["Maak een maaltijd"] = {
+                ending = "cursed",
+                messages = {
+                    "Je eet de ham",
+                    "je ben vervloekt door de JP"
+                }
+            },
+            ["Verkoop aan de eerste de beste"] = {
+                messages = {
+                    "Je verkoopt de ham en bent rijk geworden, daarmee koop je een property in Egypte."
+                },
+                next = 17
+            }
+        }
+    },
+    "Je leeft gelukkig",
+    "Made with ❤️ by the NegroTech team and executive personnel of the NegroTech company.",
 }

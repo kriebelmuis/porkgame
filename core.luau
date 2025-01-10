@@ -15,13 +15,17 @@ local saveFile = `{saveFolder}\\save.toml`
 type SaveData = {
     inventory: { string },
     endings: { string },
-    checkPoint: number
+
+    checkPoint: number,
+    porkCoin: number
 }
 
 local DefaultSaveData = {
     inventory = {},
     endings = {},
-    checkPoint = 1
+
+    checkPoint = 1,
+    porkCoin = 0
 } :: SaveData
 
 local ongoing = false
@@ -33,6 +37,7 @@ function module.init(): number
 
     if startAt == 0 then
         module.typeWrite({
+            "\n",
             "Game over.",
             "\n"
         })
