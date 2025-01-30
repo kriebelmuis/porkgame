@@ -4,9 +4,7 @@ return {
         dialog = "Ontsnap?",
         options = {
             ["Ja"] = {
-                messages = {
-                    "Je besluit te ontsnappen en begint te planen."
-                }
+                "Je besluit te ontsnappen en begint te planen."
             },
             ["Nee"] = {
                 ending = "gevangen blijven",
@@ -22,14 +20,13 @@ return {
         dialog = "Hoe ontsnap je?",
         options = {
             ["Slot kraken"] = {
+                ending = "gepakt slot",
                 messages = {
-                    "Je probeert het slot te kraken, maar het lukt niet. Einde."
+                    "Je probeert het slot te kraken, maar een bewaker betrapt je."
                 }
             },
             ["Gat graven"] = {
-                messages = {
-                    "Je begint een gat te graven onder de muur heen. . ."
-                }
+                "Je begint een gat te graven onder de muur heen. . ."
             }
         }
     },
@@ -46,10 +43,8 @@ return {
                 }
             },
             ["Nee, ik ga alleen"] = {
-                messages = {
-                    "Je besluit het alleen te doen",
-                    ". . ."
-                },
+                "Je besluit het alleen te doen",
+                ". . ."
             }
         }
     },
@@ -133,7 +128,7 @@ return {
                 }
             },
             ["Sluip verder"] = {
-                dead = true,
+                ending = "de sluiper",
                 messages = {
                     "je ben gepakt"
                 }
@@ -145,10 +140,10 @@ return {
         dialog = "Pak je de sleutel?",
         options = {
             ["Ja"] = {
+                item = "masterkey",
                 messages = {
                     "Je opent de kluis en vindt de masterkey."
-                },
-                item = "masterkey"
+                }
             },
             ["Nee"] = {
                 ending = "geen sleutel",
@@ -163,9 +158,7 @@ return {
         dialog = "Ga je naar de boot?",
         options = {
             ["Ja"] = {
-                messages = {
-                    "Je gaat naar de boot. . ."
-                }
+                "Je gaat naar de boot. . ."
             },
             ["Nee"] = {
                 ending = "gevangen in villa",
@@ -180,16 +173,10 @@ return {
         dialog = "Ontmoet je John Pork?",
         options = {
             ["Ja, ik praat met hem"] = {
-                messages = {
-                    "Je onderhandelt met Pork en krijgt toestemming om te vertrekken."
-                },
-                next = 12
+                "Je onderhandelt met Pork en krijgt toestemming om te vertrekken."
             },
             ["Nee, ik ga direct naar de boot"] = {
-                messages = {
-                    "Je sprint naar de boot en slaagt erin te ontsnappen."
-                },
-                next = 13
+                "Je sprint naar de boot en slaagt erin te ontsnappen."
             }
         }
     },
@@ -198,9 +185,7 @@ return {
         dialog = "Hoe onderhandel je met Pork?",
         options = {
             ["Bied hem bacon aan"] = {
-                messages = {
-                    "Pork accepteert de bacon en laat je gaan."
-                }
+                "Pork accepteert de bacon en laat je gaan."
             },
             ["Dreig hem met de masterkey"] = {
                 ending = "pork is bang",
@@ -215,9 +200,7 @@ return {
         dialog = "Neem je extra pork producten mee?",
         options = {
             ["Ja, ik neem een ham mee"] = {
-                messages = {
-                    "De ham zorgt voor een smakelijke reis."
-                }
+                "De ham zorgt voor een smakelijke reis."
             },
             ["Nee, ik ga met lege handen"] = {
                 ending = "pork rich",
@@ -232,14 +215,10 @@ return {
         dialog = "Hoevaar je de boot?",
         options = {
             ["Snel wegvoeren"] = {
-                messages = {
-                    "Je vaart snel weg en ontsnappt definitief."
-                }
+                "Je vaart snel weg en ontsnappt definitief."
             },
             ["Rustig wegvoeren"] = {
-                messages = {
-                    "Je vaart rustig weg en geniet van je vrijheid."
-                }
+                "Je vaart rustig weg en geniet van je vrijheid."
             }
         }
     },
@@ -255,10 +234,7 @@ return {
                 }
             },
             ["Verkoop aan de eerste de beste"] = {
-                messages = {
-                    "Je verkoopt de ham en bent rijk geworden, daarmee koop je een property in Egypte."
-                },
-                next = 17
+                "Je verkoopt de ham en bent rijk geworden, daarmee koop je een property in Egypte."
             }
         }
     },

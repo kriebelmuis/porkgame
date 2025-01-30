@@ -32,22 +32,20 @@ local DefaultSaveData = {
 
 local ongoing = false
 
-function module.init(): number
-    module.waterMark()
+function module.init(startAt: number?): number
     save.ensureSave()
 
-    -- start bij de laatst opgeslagen checkpoint
-    local startAt = tonumber(save.readSave().checkPoint) or 1
-    if startAt == 0 then
-        module.typeWrite({
-            "\n",
-            "Game over.",
-            "\n"
-        })
-    end
-
-    -- klein wachtje voor het watermarkje of net dood was gegaan
-    task.wait(3)
+	if not startAt then
+		-- start bij de laatst opgeslagen checkpoint
+		startAt = tonumber(save.readSave().checkPoint) or 1
+		if startAt == 0 then
+			module.typeWrite({
+				"\n",
+				"Game over.",
+				"\n",
+			})
+		end
+	end
 
     -- als de speler al een keer is begonnen, vraag of hij verder wilt gaan
     if startAt > 1 and not ongoing then
@@ -135,13 +133,14 @@ function module.init(): number
                 local saveData = save.readSave()
                 local gotEnding = table.find(saveData.endings, optionData.ending)
 
+                stdio.write("\n")
+
                 if not gotEnding or gotEnding <= 0 then
                     -- voeg ending toe aan array, ook een porkcoin voor gokken
                     table.insert(saveData.endings, optionData.ending)
                     saveData.porkCoin += 5
 
                     module.typeWrite({
-                        "\n",
                         `Je hebt het einde "{optionData.ending}" bereikt`,
                         "+5 PorkCoin! Sucess met gokken!"
                     })
@@ -150,9 +149,11 @@ function module.init(): number
                 else
                     -- einde al bereikt, geen beloning
                     module.typeWrite({
-                        "\n",
                         "Je hebt dit einde al bereikt"
                     })
+
+                    module.init(i)
+                    return
                 end
 
                 -- reset belangrijke informatie
@@ -166,12 +167,14 @@ function module.init(): number
             -- geen bijzondere actie, print de array van messages
             if not printed then
                 module.typeWrite(optionData)
-                return i
             end
 
             -- blijkbaar was er bij deze actie een item nodig, omdat de gebruiker deze niet had, geef hem weer de kans om te kiezen
             if optionData.required and not save.hasItem(optionData.required) then
-                return i
+                warn("geen item")
+                warn(i)
+                module.init(i)
+                return
             end
         end
 
@@ -190,7 +193,7 @@ end
 -- de linter deze walgelijke string laten toestaan
 -- selene: allow(bad_string_escape)
 function module.clearConsole()
-    stdio.write("\x1b[2J\x1b[H")
+    -- stdio.write("\x1b[2J\x1b[H")
 end
 
 function module.waterMark()    
