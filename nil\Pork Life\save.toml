@@ -1,0 +1,4 @@
+checkPoint = 28
+endings = ["gepakt slot", "no porky", "fail verkopen bacon"]
+inventory = ["sleutelbos", "masterkey"]
+porkCoin = 16

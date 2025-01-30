@@ -51,6 +51,7 @@ function module.init(startAt: number?): number
     if startAt > 1 and not ongoing then
         local confirmed = stdio.prompt("select", `Current save progression: {module.calculateProgress(startAt)}%`, { "Continue", "New Game" }) == 1
         if not confirmed then
+            save.writeSave(DefaultSaveData)
             startAt = 1
         end
     end
@@ -61,9 +62,21 @@ function module.init(startAt: number?): number
 
     -- main loop
     for i = startAt, dialogInstances do
-        local dialogData = data[i]
+        module.handleAction(data[i])
+        task.wait(1)
 
-        -- simpele dialog
+        -- save progressie
+        local saveData = save.readSave()
+        saveData.checkPoint = i
+
+        save.writeSave(saveData)
+    end
+
+    return 1
+end
+
+function module.handleAction(dialogData, progress)
+            -- simpele dialog
         if typeof(dialogData) == "string" then
             -- typeWrite functie is eigenlijk gemaakt voor meer dan 1 string, maar dit is een uitzondering
             -- string.format gebruik ik om de naam van de gebruiker te krijgen in data.luau
@@ -93,42 +106,39 @@ function module.init(startAt: number?): number
             if optionData.required then
                 local hasItem = save.hasItem(optionData.required)
                 if hasItem then
-                    module.typeWrite(optionData.messages[2])
-                    save.addItem(optionData.required)
-
-                    printed = true
-                else
                     module.typeWrite(optionData.messages[1])
-                end
+                    save.removeItem(optionData.required)
 
-            -- deze actie geeft een item aan de speler
-            elseif optionData.item then
-                if optionData.cannotSkip then
-                    local hasItem = save.hasItem(optionData.item)
-
-                    -- laat een generiek berichtje zien als de speler het item al heeft
-                    if hasItem then
-                        module.typeWrite(optionData.messages[2])
-                    else
-                        module.typeWrite(optionData.messages[1])
-
-                        module.typeWrite({
-                            `* Je hebt een {optionData.item} gevonden, +2 PorkCoin! *`
-                        })
-                        save.incrementPorkCoin(2)
-                        save.addItem(optionData.item)
-                    end
-                -- ... hier is dat niet nodig met skippable items (speler komt maar 1x langs)
+                    return -- item hebben we, in geval van ending action beendigen we de action handler
                 else
-                    module.typeWrite(optionData.messages)
-                    save.addItem(optionData.item)
+                    module.typeWrite(optionData.messages[2])
+                    
+                    -- niet herstarten als er een ending vast aan option zit,
+                    -- in dat geval is het een einde als je niet item heb
+                    if not optionData.ending then
+                        module.init(progress)
+                    end
                 end
 
                 printed = true
+            end
+
+            -- deze actie geeft een item aan de speler
+            if optionData.item then
+                if not printed then
+                    module.typeWrite(optionData.messages)
+                end
+
+                save.addItem(optionData.item)
+
+                printed = true
+            end
 
             -- deze actie geeft een eind van het spel aan
-            elseif optionData.ending then
-                module.typeWrite(optionData.messages)
+            if optionData.ending then
+                if not printed then
+                    module.typeWrite(optionData.messages)
+                end
 
                 local saveData = save.readSave()
                 local gotEnding = table.find(saveData.endings, optionData.ending)
@@ -142,26 +152,23 @@ function module.init(startAt: number?): number
 
                     module.typeWrite({
                         `Je hebt het einde "{optionData.ending}" bereikt`,
-                        "+5 PorkCoin! Sucess met gokken!"
+                        "+5 PorkCoin ontvangen voor nieuw eind."
                     })
-
-                    task.wait(3)
                 else
                     -- einde al bereikt, geen beloning
                     module.typeWrite({
                         "Je hebt dit einde al bereikt"
                     })
-
-                    module.init(i)
-                    return
                 end
+
+                task.wait(3)
 
                 -- reset belangrijke informatie
                 saveData.checkPoint = 1
                 saveData.inventory = {}
 
                 save.writeSave(saveData)
-                return 0
+                module.init(1)
             end
 
             -- geen bijzondere actie, print de array van messages
@@ -171,23 +178,10 @@ function module.init(startAt: number?): number
 
             -- blijkbaar was er bij deze actie een item nodig, omdat de gebruiker deze niet had, geef hem weer de kans om te kiezen
             if optionData.required and not save.hasItem(optionData.required) then
-                warn("geen item")
-                warn(i)
-                module.init(i)
+                module.init(progress)
                 return
             end
         end
-
-        task.wait(1)
-
-        -- save progressie
-        local saveData = save.readSave()
-        saveData.checkPoint = i
-
-        save.writeSave(saveData)
-    end
-
-    return 1
 end
 
 -- de linter deze walgelijke string laten toestaan

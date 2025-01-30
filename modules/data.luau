@@ -1,4 +1,5 @@
 return {
+    "Word wakker %s...",
     "Je zit vast in John Pork's gevangenis",
     {
         dialog = "Ontsnap?",
@@ -15,7 +16,7 @@ return {
             }
         }
     },
-    "Je bent in de gevangeniscel",
+    "Je bent in een gevangeniscel",
     {
         dialog = "Hoe ontsnap je?",
         options = {
@@ -34,7 +35,7 @@ return {
     {
         dialog = "Ontmoet je een medegevangene?",
         options = {
-            ["Ja, ik ga kijken hoe het met hem gaat"] = {
+            ["Ja"] = {
                 item = "bacon",
                 messages = {
                     ". . .",
@@ -42,7 +43,7 @@ return {
                     "Je gaat met hem om en ontvangt een stuk bacon als beloning!"
                 }
             },
-            ["Nee, ik ga alleen"] = {
+            ["Nee"] = {
                 "Je besluit het alleen te doen",
                 ". . ."
             }
@@ -80,23 +81,22 @@ return {
             ["Sloom deur openen"] = {
                 ending = "gepakt bij deur",
                 messages = {
-                    "Je trapt de deur open, maar wordt gepakt. Einde."
+                    "Je doet sloom de deur open maar het alarm gaat af en kort daarna ben je gepakt. Einde."
                 }
             },
             ["Trap de deur open"] = {
-                ending = "epic win",
-                messages = {
-                    "Je opent de deur zonder problemen. Je bent vrij! Einde."
-                }
+                "Je opent de deur zonder problemen. Je bent eindelijk buiten!",
+                "Maar je ben nog niet van John Pork eiland af!"
             }
         }
     },
     "Je ziet een paar bewakers om de hoek",
-    "Hoe ga je hun afleiden om verder te komen?",
     {
-        dialog = "Hoe gebruik je de bacon?",
+        dialog = "Hoe ga je hun afleiden om verder te komen?",
         options = {
-            ["Leid bewakers af"] = {
+            ["Leid bewakers af door bacon"] = {
+                required = "bacon",
+                ending = "fail afleiding bacon",
                 messages = {
                     {
                         "*je zet wat bacon midden in de kamer van de bewakers neer*",
@@ -105,18 +105,20 @@ return {
                         "*je sluipt verder*"
                     },
                     {
-                        "je heb geen bacon om de bewakers af te leiden"
+                        "je heb geen bacon om de bewakers af te leiden",
+                        "je word snel terug in je cel gezet"
                     }
                 }
             },
-            ["Verkoop aan bewakers"] = {
+            ["Verkoop bacon aan bewakers"] = {
                 required = "bacon",
+                ending = "fail verkopen bacon",
                 messages = {
                     {
                         "*je loop naar de bewakers*",
-                        "wilt u wat bacon",
+                        "jij: wilt u wat bacon",
                         "hier is de bacon",
-                        "oke vriend succes ermee"
+                        "bewaker: oke vriend, succes met je ontsnapping"
                     },
                     {
                         "*je loop naar de bewakers*",
@@ -130,7 +132,7 @@ return {
             ["Sluip verder"] = {
                 ending = "de sluiper",
                 messages = {
-                    "je ben gepakt"
+                    "je ben gepakt door de bewakers"
                 }
             }
         }
@@ -168,24 +170,50 @@ return {
             }
         }
     },
-    "Je bent bij de boot",
+    "Je vind meer pork in de boot!",
     {
-        dialog = "Ontmoet je John Pork?",
+        dialog = "Neem je extra pork producten mee?",
         options = {
-            ["Ja, ik praat met hem"] = {
-                "Je onderhandelt met Pork en krijgt toestemming om te vertrekken."
+            ["Ja, ik neem een ham mee"] = {
+                item = "bacon",
+                messages = {
+                    "De ham zorgt voor een smakelijke reis!"
+                }
             },
-            ["Nee, ik ga direct naar de boot"] = {
-                "Je sprint naar de boot en slaagt erin te ontsnappen."
+            ["Nee, ik ga met lege handen"] = {
+                "Je gaat met lege handen."
             }
         }
     },
-    "Je praat met John Pork",
+    {
+        dialog = "Wil je met DE John Pork onderhandelen?",
+        options = {
+            ["Ja, onderhandel met hem"] = {
+                "Je gaat naar John Pork toe op het andere eiland met je boot"
+            },
+            ["Nee, ontsnap met de boot"] = {
+                ending = "no talk",
+                messages = {
+                    "John Pork vond dat geen goed plan. Bewakers hebben je weer gevangen genomen."
+                }
+            }
+        }
+    },
     {
         dialog = "Hoe onderhandel je met Pork?",
         options = {
             ["Bied hem bacon aan"] = {
-                "Pork accepteert de bacon en laat je gaan."
+                required = "bacon",
+                ending = "no porky",
+                messages = {
+                    {
+                        "Pork accepteert de bacon en laat je gaan."
+                    },
+                    {
+                        "Je heb geen pork!",
+                        "Pork vermoord je"
+                    }
+                }
             },
             ["Dreig hem met de masterkey"] = {
                 ending = "pork is bang",
@@ -196,26 +224,12 @@ return {
         }
     },
     "Je bent aan boord van de boot",
-    {
-        dialog = "Neem je extra pork producten mee?",
-        options = {
-            ["Ja, ik neem een ham mee"] = {
-                "De ham zorgt voor een smakelijke reis."
-            },
-            ["Nee, ik ga met lege handen"] = {
-                ending = "pork rich",
-                messages = {
-                    "Je gaat met lege handen, maar bent vrij."
-                }
-            }
-        }
-    },
     "Je zet koers naar de vrijheid",
     {
         dialog = "Hoevaar je de boot?",
         options = {
             ["Snel wegvoeren"] = {
-                "Je vaart snel weg en ontsnappt definitief."
+                "Je vaart snel weg en ontsnapt definitief."
             },
             ["Rustig wegvoeren"] = {
                 "Je vaart rustig weg en geniet van je vrijheid."
