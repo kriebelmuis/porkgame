@@ -6,7 +6,7 @@ A thrilling game about the escaping of John Pork's villa.
 ## Requirements
 
 - Windows, MacOs or Linux
-- For source: Foreman Package Manager
+- For source: Lune Standable Lua U Compiler
 
 # Running game
 
