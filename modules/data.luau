@@ -56,7 +56,7 @@ return {
             ["De keuken"] = {
                 item = "sleutelbos",
                 messages = {
-                    "Je vindt een sleutel in de keuken, bij de ham."
+                    "Je vindt een sleutelbos in de keuken, bij de ham."
                 }
             },
             ["Een slaapkamer"] = {
@@ -99,7 +99,7 @@ return {
                 ending = "fail afleiding bacon",
                 messages = {
                     {
-                        "*je zet wat bacon midden in de kamer van de bewakers neer*",
+                        "*je zet wat bacon stilletjes voor de bewakers neer*",
                         "een bewaker: 'hey kijk daar is wat bacon'",
                         "een bewaker: 'wat is dat bacon?'",
                         "*je sluipt verder*"
@@ -137,30 +137,38 @@ return {
             }
         }
     },
-    "Je bent bij de kluis",
+    "Je vind buiten een sleutel",
     {
-        dialog = "Pak je de sleutel?",
+        dialog = "Pak je de verdachte sleutel?",
         options = {
             ["Ja"] = {
-                item = "masterkey",
+                item = "boatkey",
                 messages = {
-                    "Je opent de kluis en vindt de masterkey."
+                    "Je opent de kluis en vindt de bootsleute!"
                 }
             },
             ["Nee"] = {
-                ending = "geen sleutel",
-                messages = {
-                    "Zonder sleutel kom je niet verder. Einde."
-                }
+                "Je slaat de verdachte sleutel over"
             }
         }
     },
-    "Je hebt de masterkey",
+    "Je vind een kleine haven",
+    "Er staat een boot gestalt",
     {
-        dialog = "Ga je naar de boot?",
+        dialog = "Ga je weg met de boot?",
         options = {
             ["Ja"] = {
-                "Je gaat naar de boot. . ."
+                required = "boatkey",
+                ending = "geen bootsleutel",
+                messages = {
+                    {
+                        "Je start de boot op"
+                    },
+                    {
+                        "De boot is opslot!",
+                        "Een bewaker heeft je gevonden"
+                    }
+                }
             },
             ["Nee"] = {
                 ending = "gevangen in villa",
