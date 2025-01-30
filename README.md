@@ -3,6 +3,10 @@
 
 A thrilling game about the escaping of John Pork's villa.
 
+## Trello
+
+> [Link](https://trello.com/invite/b/677d5887acb9b24593a295e4/ATTIacf3a19417d6ac0ad8eea63a69d83390ADBDE206/jp-game)
+
 ## Requirements
 
 - Windows, MacOs or Linux
