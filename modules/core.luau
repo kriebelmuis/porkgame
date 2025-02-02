@@ -55,26 +55,30 @@ function module.handleAction(dialogData, progress): boolean
 
     -- geavanceerde dialog
     elseif typeof(dialogData) == "table" then
-        local options = {}
-        for option, _ in dialogData.options do
-            table.insert(options, option)
-        end
-
         stdio.write("\n")
 
+        -- lees inventory
         local inventory = save.readSave().inventory
-        for i, item in inventory do
-            inventory[i] = items[item]
-        end
         
         -- print inventory als we items hebben
         if #inventory ~= 0 then
+            -- zet om in emojis doormiddel van items table
+            for i, item in inventory do
+                inventory[i] = items[item]
+            end
+            
             module.typeWrite({
                 `🎒 Inventory: {table.concat(inventory, ", ")}`,
             })
         end
 
         stdio.write("\n")
+
+        -- zet alle opties in een array
+        local options = {}
+        for option in dialogData.options do
+            table.insert(options, option)
+        end
 
         -- selectie prompt van de runtime (GEEN EXTERNAL LIBRARY)
         local input = stdio.prompt("select", dialogData.dialog, options)
