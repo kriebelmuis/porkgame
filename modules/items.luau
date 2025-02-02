@@ -1,0 +1,5 @@
+return {
+    ["bootsleutel"] = "🔑🛥️",
+    ["bacon"] = "🥓",
+    ["sleutelbos"] = "🔑"
+}

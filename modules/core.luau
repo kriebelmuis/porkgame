@@ -8,10 +8,11 @@ local process = require("@lune/process")
 -- components
 local save = require("./save.luau")
 local data = require("./data.luau")
+local items = require("./items.luau")
 
 local dialogInstances = #data
 
-type SaveData = {
+export type SaveData = {
     inventory: { string },
     endings: { string },
 
@@ -19,43 +20,8 @@ type SaveData = {
     porkCoin: number
 }
 
-local DefaultSaveData = {
-    inventory = {},
-    endings = {},
-
-    checkPoint = 1,
-    porkCoin = 0
-} :: SaveData
-
-local ongoing = false
-
-function module.init(startAt: number?): number
-    save.ensureSave()
-
-	if not startAt then
-		-- start bij de laatst opgeslagen checkpoint
-		startAt = tonumber(save.readSave().checkPoint) or 1
-		if startAt == 0 then
-			module.typeWrite({
-				"\n",
-				"Game over.",
-				"\n",
-			})
-		end
-	end
-
-    -- als de speler al een keer is begonnen, vraag of hij verder wilt gaan
-    if startAt > 1 and not ongoing then
-        local confirmed = stdio.prompt("select", `Current save progression: {module.calculateProgress(startAt)}%`, { "Continue", "New Game" }) == 1
-        if not confirmed then
-            save.writeSave(DefaultSaveData)
-            startAt = 1
-        end
-    end
-
+function module.init(startAt: number): number
     module.clearConsole()
-
-    ongoing = true
 
     -- main loop
     for i = startAt, dialogInstances do
@@ -92,6 +58,20 @@ function module.handleAction(dialogData, progress): boolean
         local options = {}
         for option, _ in dialogData.options do
             table.insert(options, option)
+        end
+
+        stdio.write("\n")
+
+        local inventory = save.readSave().inventory
+        for i, item in inventory do
+            inventory[i] = items[item]
+        end
+        
+        -- print inventory als we items hebben
+        if #inventory ~= 0 then
+            module.typeWrite({
+                `🎒 Inventory: {table.concat(inventory, ", ")}`,
+            })
         end
 
         stdio.write("\n")
@@ -147,9 +127,11 @@ function module.handleAction(dialogData, progress): boolean
 
             stdio.write("\n")
 
+            -- als we voldoende porkcoins hebben, kunnen we ons reviven
             if saveData.porkCoin >= 5 then
                 local revive = stdio.prompt("confirm", "Wil je 5 PorkCoins gebruiken om jezelf te reviven?")
 
+                -- als we ja zeiden op de prompt, returnen we true zodat we de vorige actie opnieuw kunnen doen
                 if revive then
                     saveData.porkCoin -= 5
                     save.writeSave(saveData)
@@ -158,6 +140,7 @@ function module.handleAction(dialogData, progress): boolean
                 end
             end
 
+            -- geef 5 porkcoins voor het bereiken van een nieuw einde
             if not gotEnding or gotEnding <= 0 then
                 -- voeg ending toe aan array, ook een porkcoin voor gokken
                 table.insert(saveData.endings, optionData.ending)
@@ -200,7 +183,7 @@ end
 -- de linter deze walgelijke string laten toestaan
 -- selene: allow(bad_string_escape)
 function module.clearConsole()
-    -- stdio.write("\x1b[2J\x1b[H")
+    stdio.write("\x1b[2J\x1b[H")
 end
 
 function module.waterMark()    
@@ -215,31 +198,32 @@ function module.waterMark()
     stdio.write(stdio.style("reset"))
 end
 
-function module.calculateProgress(progress: number): number
-    return math.floor(progress / dialogInstances * 100)
-end
-
+-- typeWrite functie, simuleert het typen van tekst
 function module.typeWrite(messages: { string })
     for _, text in messages do
-        local characters = text:split("")
-        local wordCount = #text:split(" ")
+        local characters = text:split("") -- split elke character doormiddel van een lege string
+        local wordCount = #text:split(" ") -- split elke woord doormiddel van een spatie
     
         local waitTime = 0.05
         local firstChar = string.sub(text, 1, 1)
     
+        -- als de string een ". . ." is, wacht dan 0.5 seconden voor elk puntje
         if firstChar == "." then
             waitTime = 0.5
         end
     
+        -- als de eerste character een * is, print dan een rode uitroepteken voor tekst
         if firstChar == "*" then
             stdio.write(`{stdio.color("red")}\n! {stdio.color("reset")}`)
         else
             stdio.write("> ")
         end
     
+        -- loop door de characters en print ze
         for _, char in pairs(characters) do
             stdio.write(char)
             
+            -- niet wachten op spaties
             if char ~= " " then
                 task.wait(waitTime)
             end

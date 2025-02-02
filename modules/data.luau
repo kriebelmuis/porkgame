@@ -31,7 +31,7 @@ return {
             }
         }
     },
-    "Je ontsnapte door het gat en zit nu in John Pork's villa",
+    "Je ontsnapte door het gat en zit nu in de John Pork's villa",
     {
         dialog = "Ontmoet je een medegevangene?",
         options = {
@@ -49,14 +49,14 @@ return {
             }
         }
     },
-    "Je bent in de villa",
+    "Je gaat proberen de villa te ontsnappen",
     {
         dialog = "Waar ga je als eerst heen?",
         options = {
             ["De keuken"] = {
                 item = "sleutelbos",
                 messages = {
-                    "Je vindt een sleutelbos in de keuken, bij de ham."
+                    "Je vindt een sleutelbos in de keuken, recht naast de ham."
                 }
             },
             ["Een slaapkamer"] = {
@@ -85,7 +85,7 @@ return {
                 }
             },
             ["Trap de deur open"] = {
-                "Je opent de deur zonder problemen. Je bent eindelijk buiten!",
+                "Je trapt de in deur zonder problemen. Je bent eindelijk buiten!",
                 "Maar je ben nog niet van John Pork eiland af!"
             }
         }
@@ -137,14 +137,14 @@ return {
             }
         }
     },
-    "Je vind buiten een sleutel",
+    "Je vind buiten een rare kluis, hij staat half open?",
     {
-        dialog = "Pak je de verdachte sleutel?",
+        dialog = "Kijk je in de kluis?",
         options = {
             ["Ja"] = {
-                item = "boatkey",
+                item = "bootsleutel",
                 messages = {
-                    "Je opent de kluis en vindt de bootsleute!"
+                    "Je opent de kluis en vindt de bootsleutel!"
                 }
             },
             ["Nee"] = {
@@ -158,7 +158,7 @@ return {
         dialog = "Ga je weg met de boot?",
         options = {
             ["Ja"] = {
-                required = "boatkey",
+                required = "bootsleutel",
                 ending = "gevangen in villa",
                 messages = {
                     {
@@ -223,7 +223,7 @@ return {
                     }
                 }
             },
-            ["Dreig hem met de masterkey"] = {
+            ["Dreig hem met de sleutels"] = {
                 ending = "dood door john pork",
                 messages = {
                     "Pork is boos omdat je zijn sleutel hem en maakt je dood."

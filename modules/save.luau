@@ -2,7 +2,6 @@ local SaveModule = {}
 
 local serde = require("@lune/serde")
 local fs = require("@lune/fs")
-local process = require("@lune/process")
 
 local saveFolder = "./data"
 local saveFile = `{saveFolder}/save.toml`
