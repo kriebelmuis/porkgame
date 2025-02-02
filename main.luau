@@ -1,6 +1,6 @@
 local task = require("@lune/task")
 
-local core = require("./core.luau")
+local core = require("./modules/core.luau")
 
 local ok, err = pcall(function()
     core.waterMark()

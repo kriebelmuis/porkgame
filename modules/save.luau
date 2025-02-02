@@ -4,8 +4,8 @@ local serde = require("@lune/serde")
 local fs = require("@lune/fs")
 local process = require("@lune/process")
 
-local saveFolder = `{process.env["LOCALAPPDATA"]}\\Pork Life`
-local saveFile = `{saveFolder}\\save.toml`
+local saveFolder = "./data"
+local saveFile = `{saveFolder}/save.toml`
 
 export type SaveData = {
     inventory: { string },

@@ -8,7 +8,7 @@ return {
                 "Je besluit te ontsnappen en begint te planen."
             },
             ["Nee"] = {
-                ending = "gevangen blijven",
+                ending = "gevangen in villa",
                 messages = {
                     "Je blijft in de gevangenis ongevoed voor jaren lang.",
                     "John Pork is een duistere man en je moet hem niet vergeten."
@@ -21,7 +21,7 @@ return {
         dialog = "Hoe ontsnap je?",
         options = {
             ["Slot kraken"] = {
-                ending = "gepakt slot",
+                ending = "gevangen in villa",
                 messages = {
                     "Je probeert het slot te kraken, maar een bewaker betrapt je."
                 }
@@ -60,7 +60,7 @@ return {
                 }
             },
             ["Een slaapkamer"] = {
-                ending = "gepakt slapende pork",
+                ending = "gevangen in villa",
                 messages = {
                     "*je doet de deur op een kier open*",
                     "Je hoort iemand snurken?",
@@ -79,7 +79,7 @@ return {
         dialog = "Hoe open je de deur?",
         options = {
             ["Sloom deur openen"] = {
-                ending = "gepakt bij deur",
+                ending = "gevangen in villa",
                 messages = {
                     "Je doet sloom de deur open maar het alarm gaat af en kort daarna ben je gepakt. Einde."
                 }
@@ -96,7 +96,7 @@ return {
         options = {
             ["Leid bewakers af door bacon"] = {
                 required = "bacon",
-                ending = "fail afleiding bacon",
+                ending = "gevangen in villa",
                 messages = {
                     {
                         "*je zet wat bacon stilletjes voor de bewakers neer*",
@@ -112,7 +112,7 @@ return {
             },
             ["Verkoop bacon aan bewakers"] = {
                 required = "bacon",
-                ending = "fail verkopen bacon",
+                ending = "gevangen in villa",
                 messages = {
                     {
                         "*je loop naar de bewakers*",
@@ -130,7 +130,7 @@ return {
                 }
             },
             ["Sluip verder"] = {
-                ending = "de sluiper",
+                ending = "gevangen in villa",
                 messages = {
                     "je ben gepakt door de bewakers"
                 }
@@ -159,7 +159,7 @@ return {
         options = {
             ["Ja"] = {
                 required = "boatkey",
-                ending = "geen bootsleutel",
+                ending = "gevangen in villa",
                 messages = {
                     {
                         "Je start de boot op"
@@ -173,7 +173,7 @@ return {
             ["Nee"] = {
                 ending = "gevangen in villa",
                 messages = {
-                    "Je wordt teruggevangen. Einde."
+                    "Je wordt gevangen door de bewakers."
                 }
             }
         }
@@ -200,7 +200,7 @@ return {
                 "Je gaat naar John Pork toe op het andere eiland met je boot"
             },
             ["Nee, ontsnap met de boot"] = {
-                ending = "no talk",
+                ending = "gevangen in villa",
                 messages = {
                     "John Pork vond dat geen goed plan. Bewakers hebben je weer gevangen genomen."
                 }
@@ -212,7 +212,7 @@ return {
         options = {
             ["Bied hem bacon aan"] = {
                 required = "bacon",
-                ending = "no porky",
+                ending = "gevangen in villa",
                 messages = {
                     {
                         "Pork accepteert de bacon en laat je gaan."
@@ -224,7 +224,7 @@ return {
                 }
             },
             ["Dreig hem met de masterkey"] = {
-                ending = "pork is bang",
+                ending = "dood door john pork",
                 messages = {
                     "Pork is boos omdat je zijn sleutel hem en maakt je dood."
                 }

@@ -6,13 +6,10 @@ local task = require("@lune/task")
 local process = require("@lune/process")
 
 -- components
-local save = require("./modules/save.luau")
-local data = require("./modules/data.luau")
+local save = require("./save.luau")
+local data = require("./data.luau")
 
 local dialogInstances = #data
-
-local saveFolder = `{process.env["LOCALAPPDATA"]}\\Hit Game Pork Life`
-local saveFile = `{saveFolder}\\save.toml`
 
 type SaveData = {
     inventory: { string },
