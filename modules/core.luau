@@ -50,7 +50,7 @@ function module.handleAction(dialogData, progress): boolean
         -- string.format gebruik ik om de naam van de gebruiker te krijgen in data.luau
 
         module.typeWrite({
-            string.format(dialogData, process.env["USERNAME"]:lower())
+            string.format(dialogData, (process.env["USERNAME"] or process.env["USER"] or ""):lower()),
         })
 
     -- geavanceerde dialog
