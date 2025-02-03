@@ -25,7 +25,7 @@
 | 2.4 Gat graven | Speler kiest om een gat te graven | Juiste dialoog en opties verschijnen |
 | 2.5 Ontmoet medegevangene | Speler kiest om een medegevangene te ontmoeten | Speler ontvangt item "bacon" |
 | 2.6 Keuken doorzoeken | Speler kiest om naar de keuken te gaan | Speler ontvangt item "sleutelbos" |
-| 2.7 Slaapkamer doorzoeken | Speler kiest om naar de slaapkamer te gaan | Ending "gepakt slapende pork" verschijnt correct |
+| 2.7 Slaapkamer doorzoeken | Speler kiest om naar de slaapkamer te gaan | Ending 3.5 verschijnt correct |
 | 2.8 Deur openen | Speler kiest hoe de deur te openen | Juiste dialoog en opties verschijnen |
 | 2.9 Bewakers afleiden | Speler kiest hoe de bewakers af te leiden | Juiste dialoog en opties verschijnen |
 | 2.10 Sleutel pakken | Speler kiest om de verdachte sleutel te pakken | Speler ontvangt item "boatkey" |

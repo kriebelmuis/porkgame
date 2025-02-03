@@ -69,7 +69,8 @@ return {
                     "*pakt rustig de sleutel in de slaapkamer*",
                     "*knor*",
                     "*je draait jezelf rustig om*",
-                    "John Pork: 'En wat doe jij hier knul?'"
+                    "John Pork: 'En wat doe jij hier knul?'",
+                    "John Pork vermoord je"
                 }
             }
         }
@@ -166,7 +167,7 @@ return {
                     },
                     {
                         "De boot is opslot!",
-                        "Een bewaker heeft je gevonden"
+                        "Een bewaker heeft je gevonden!!!"
                     }
                 }
             },

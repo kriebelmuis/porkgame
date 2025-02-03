@@ -130,6 +130,7 @@ function module.handleAction(dialogData, progress): boolean
             local gotEnding = table.find(saveData.endings, optionData.ending)
 
             stdio.write("\n")
+            task.wait(3)
 
             -- als we voldoende porkcoins hebben, kunnen we ons reviven
             if saveData.porkCoin >= 5 then
@@ -153,11 +154,6 @@ function module.handleAction(dialogData, progress): boolean
                 module.typeWrite({
                     `Je hebt het einde "{optionData.ending}" bereikt`,
                     "+5 PorkCoin ontvangen voor nieuw eind."
-                })
-            else
-                -- einde al bereikt, geen beloning
-                module.typeWrite({
-                    "Je hebt dit einde al bereikt"
                 })
             end
 
